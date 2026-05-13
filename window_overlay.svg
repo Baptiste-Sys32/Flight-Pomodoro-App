@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1200" height="1800" viewBox="0 0 1200 1800" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <!-- Gradients for the Fuselage Wall -->
+        <linearGradient id="wall-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#141619"/> <!-- Darker edge -->
+            <stop offset="50%" stop-color="#1e2025"/> <!-- Lighter center -->
+            <stop offset="100%" stop-color="#141619"/> <!-- Darker edge -->
+        </linearGradient>
+
+        <radialGradient id="wall-texture" cx="50%" cy="50%" r="80%">
+             <stop offset="0%" stop-color="#ffffff" stop-opacity="0.05"/>
+             <stop offset="100%" stop-color="#000000" stop-opacity="0.2"/>
+        </radialGradient>
+
+        <!-- Gradients for the Plastic Frame -->
+        <linearGradient id="frame-bevel" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#50545a"/> <!-- Highlight top-left -->
+            <stop offset="50%" stop-color="#3a3d42"/> <!-- Mid -->
+            <stop offset="100%" stop-color="#2a2c30"/> <!-- Shadow bottom-right -->
+        </linearGradient>
+
+        <linearGradient id="frame-inner-bevel" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#222428"/> <!-- Shadow top-left -->
+            <stop offset="100%" stop-color="#4a4d52"/> <!-- Highlight bottom-right -->
+        </linearGradient>
+        
+        <!-- Filters for Realism -->
+        <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="15" result="blur"/>
+            <feOffset in="blur" dx="0" dy="10" result="offsetBlur"/>
+            <feComposite in="offsetBlur" in2="SourceAlpha" operator="out" result="outerShadow"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0"/>
+        </filter>
+
+        <filter id="inner-shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feComponentTransfer in="SourceAlpha">
+                <feFuncA type="table" tableValues="1 0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="8"/>
+            <feOffset dx="3" dy="5" result="shadow"/>
+            <feComposite in2="SourceAlpha" operator="in" result="innerShadow"/>
+             <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.7 0"/>
+        </filter>
+        
+        <!-- Window Shape Definition (Superellipse-ish) -->
+        <rect id="viewport-rect" x="0" y="0" width="1200" height="1800"/>
+        
+        <!-- The Cutout Shape -->
+        <!-- Center centered at 600, 900. Width ~600, Height ~900 -->
+        <image id="noise" width="1200" height="1800" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjE4MDAiPjxmaWx0ZXIgaWQ9Im4iPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjUiIG51bU9jdGF2ZXM9IjMiIHN0aXRjaFRpbGVzPSJzdGl0Y2giLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjWikiIG9wYWNpdHk9IjAuMDUiLz48L3N2Zz4="/>
+        
+        <mask id="window-mask">
+            <rect x="0" y="0" width="1200" height="1800" fill="white"/>
+            <!-- Cutout the window hole (black makes transparent) -->
+             <ellipse cx="600" cy="900" rx="340" ry="520" fill="black"/>
+        </mask>
+    </defs>
+
+    <!-- 1. The Fuselage Wall -->
+    <rect width="100%" height="100%" fill="url(#wall-gradient)" mask="url(#window-mask)"/>
+    <rect width="100%" height="100%" fill="url(#wall-texture)" mask="url(#window-mask)" style="mix-blend-mode: overlay;"/>
+    
+    <!-- 2. The Main Plastic Frame (Outer Ring) -->
+    <!-- Larger Ellipse behind -->
+    <ellipse cx="600" cy="900" rx="380" ry="560" fill="url(#frame-bevel)" filter="url(#soft-shadow)" mask="url(#window-mask)"/>
+
+    <!-- The Beveled Frame Rim -->
+    <path d="M 600, 340 
+             A 380,560 0 1,0 600,1460 
+             A 380,560 0 1,0 600,340 
+             M 600, 380 
+             A 340,520 0 1,1 600,1420 
+             A 340,520 0 1,1 600,380 Z" 
+          fill="url(#frame-bevel)" 
+          fill-rule="evenodd"
+          filter="url(#soft-shadow)"/>
+
+    <!-- 3. Inner Seal/Gasket (Dark Rubber) -->
+    <ellipse cx="600" cy="900" rx="345" ry="525" fill="none" stroke="#202020" stroke-width="12"/>
+
+    <!-- 4. Subtle Reflections/Scratches on the 'Glass' (simulated on frame edge) -->
+    <ellipse cx="600" cy="900" rx="340" ry="520" fill="none" stroke="url(#frame-inner-bevel)" stroke-width="4" opacity="0.5"/>
+
+</svg>
