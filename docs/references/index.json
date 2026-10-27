@@ -1,0 +1,389 @@
+{
+  "captured_on": "2026-10-27",
+  "video_source_page": "https://screensdesign.com/apps/focusflight-deepfocus-timer/",
+  "appstore_source": "https://apps.apple.com/us/app/focusflight-deepfocus-timer/id6648771147",
+  "video_seconds": 897.985,
+  "video_resolution": [
+    480,
+    1038
+  ],
+  "video_sha256": "51c76c83961e1d75ccf599c987b158d37d6aa893dfdd8ea83557f3cce0e1c0b9",
+  "note": "Reference evidence only. Never ship these images as app assets. Video player authorization parameters intentionally omitted. ffmpeg fps=1; numbered frame 1 corresponds to t=0.",
+  "references": [
+    {
+      "file": "ios-00-40.jpg",
+      "video_time_seconds": 40,
+      "sha256": "3f1194390b9c327ec412cea39f3427e2ae7cca4522cd174c533b5527ce9162f2"
+    },
+    {
+      "file": "ios-01-00.jpg",
+      "video_time_seconds": 60,
+      "sha256": "731515e4090091d57fa9adae2650a0421ac637b47e55da6fa178c581a8bf725a"
+    },
+    {
+      "file": "ios-01-10.jpg",
+      "video_time_seconds": 70,
+      "sha256": "ff20ccca9809bbdc017bcbb1868c40bcc016f9c5883795df3a39c14e59db7a79"
+    },
+    {
+      "file": "ios-01-30.jpg",
+      "video_time_seconds": 90,
+      "sha256": "8c034e76ec0bbcb44abed70caa17785bb05ae0b6cb62b902a4e49b1b6ff6854c"
+    },
+    {
+      "file": "ios-03-05.jpg",
+      "video_time_seconds": 185,
+      "sha256": "66c53a787083d709f5c7d39948799637163997473bf40ea4c98cebba0b4eb638"
+    },
+    {
+      "file": "ios-03-20.jpg",
+      "video_time_seconds": 200,
+      "sha256": "46247ce8a53bd6d0f7b627da011f3dff1896d0fce8e6226f9297a26d5db6b5da"
+    },
+    {
+      "file": "ios-03-45.jpg",
+      "video_time_seconds": 225,
+      "sha256": "19f67d65879e1cd329fa5e1dbf68ea91ef5d0e2496d4359078cda803baaba044"
+    },
+    {
+      "file": "ios-03-50.jpg",
+      "video_time_seconds": 230,
+      "sha256": "152ea0a804b9af73e19c29efcabbe6e6014f98f90f6ad3bd259c00caff10d48d"
+    },
+    {
+      "file": "ios-04-05.jpg",
+      "video_time_seconds": 245,
+      "sha256": "819c94330b1dc010fb47cb62d09ee0ba9cd06fc5041a299d01ebeecdd36aa98d"
+    },
+    {
+      "file": "ios-04-10.jpg",
+      "video_time_seconds": 250,
+      "sha256": "0fc66ce28462f329588bc2eb6480b79b443bc791ec8b2e8c46404048a1d9b69f"
+    },
+    {
+      "file": "ios-04-18.jpg",
+      "video_time_seconds": 258,
+      "sha256": "1f374a4ed264b465526fecd07bcd9baf41c4cb1a1572d908205246dc9b48c6ac"
+    },
+    {
+      "file": "ios-04-41.jpg",
+      "video_time_seconds": 281,
+      "sha256": "54befb9817e9807016b7eebde2407983881573c1d7d864472217f52174c09d36"
+    },
+    {
+      "file": "ios-04-46.jpg",
+      "video_time_seconds": 286,
+      "sha256": "6984695ab8c2a743784c1410a85ae608a66272f86ee4e699ece17ad6dd3e5310"
+    },
+    {
+      "file": "ios-04-50.jpg",
+      "video_time_seconds": 290,
+      "sha256": "84a944cc514efdaacceee157b2dfcdd5dd574fafb1a2e98808c89ebac1cb3684"
+    },
+    {
+      "file": "ios-05-00.jpg",
+      "video_time_seconds": 300,
+      "sha256": "91dd3189d7237d5a4ed39ead786bf7e5ca40fc66c8954f013dc311eafd2e4588"
+    },
+    {
+      "file": "ios-05-10.jpg",
+      "video_time_seconds": 310,
+      "sha256": "305231836e25bd85068c9f3334ad717c6f5126518ac0b8ab4ece66a9ed1b33d4"
+    },
+    {
+      "file": "ios-05-20.jpg",
+      "video_time_seconds": 320,
+      "sha256": "8e62549788b82197fe7c9dceda0dceacc0c96e480fbff2f256ac0822e3fe1b74"
+    },
+    {
+      "file": "ios-05-40.jpg",
+      "video_time_seconds": 340,
+      "sha256": "b770d3eab0da4f215533abf159b86d49674635bfb2cab5b76d20c667628a1b0d"
+    },
+    {
+      "file": "ios-05-50.jpg",
+      "video_time_seconds": 350,
+      "sha256": "2dde2e5e755b9ecca2ac66d366b8064495dee263e004638da0382b85848db576"
+    },
+    {
+      "file": "ios-06-09.jpg",
+      "video_time_seconds": 369,
+      "sha256": "39b36c4be49d218b8dd0b7e83c24f878d8a3ddd8a67c8012f785f6c23bbd2545"
+    },
+    {
+      "file": "ios-06-13.jpg",
+      "video_time_seconds": 373,
+      "sha256": "7d368e763e9503dcfae4a15f15504c0335104b9d06e900cb925604627c37bbc8"
+    },
+    {
+      "file": "ios-06-17.jpg",
+      "video_time_seconds": 377,
+      "sha256": "3cd779ef86710292703a0745a34f7999bd78c087ee60a8046f9c02ac0807be04"
+    },
+    {
+      "file": "ios-07-00.jpg",
+      "video_time_seconds": 420,
+      "sha256": "97d93c4f4b9794a9b485f533bf2dd77f5ecc7bc3ed5a142191f9571f5c3b59b3"
+    },
+    {
+      "file": "ios-07-18.jpg",
+      "video_time_seconds": 438,
+      "sha256": "0d78b89b3ae10522a6a1ba22feb5cf0e42ee6c822f63ec3dcb6b88c8ec13f1da"
+    },
+    {
+      "file": "ios-07-22.jpg",
+      "video_time_seconds": 442,
+      "sha256": "92482e1819b6af77eda1934062a39b6b052f40f4a4349dc40166c9e4f09452e2"
+    },
+    {
+      "file": "ios-07-28.jpg",
+      "video_time_seconds": 448,
+      "sha256": "98831f4cad446bb98b325b8408ffd2c556126f05ff6f45cee74d307d6ea2d77d"
+    },
+    {
+      "file": "ios-07-35.jpg",
+      "video_time_seconds": 455,
+      "sha256": "8a3b572e759465463a1e452e9bd9505810507749c784eaad77c52dd76a08a9fa"
+    },
+    {
+      "file": "ios-07-45.jpg",
+      "video_time_seconds": 465,
+      "sha256": "3d11c0095557dfcbeb564575086797a904c2f924fd866828f26090758a7bd306"
+    },
+    {
+      "file": "ios-08-10.jpg",
+      "video_time_seconds": 490,
+      "sha256": "d7a78bbe5e5c4d1ee56a7cf680c8042c0b7f2b6d46bf8cf1dd169c3b2873874f"
+    },
+    {
+      "file": "ios-08-29.jpg",
+      "video_time_seconds": 509,
+      "sha256": "238e8be06f5fd8db89f9fe0aea4de2ac56492c2556000d3155399e592216c680"
+    },
+    {
+      "file": "ios-08-41.jpg",
+      "video_time_seconds": 521,
+      "sha256": "6195e50de2de84f2f86a544d57e22d389d978a5fce3bc3670e54613c575468cb"
+    },
+    {
+      "file": "ios-09-00.jpg",
+      "video_time_seconds": 540,
+      "sha256": "8f355146babcaf88da7514eb07808c27dce3fb75e0529b71cc824cfe626801a1"
+    },
+    {
+      "file": "ios-09-20.jpg",
+      "video_time_seconds": 560,
+      "sha256": "7eb03ff1b213b62bc93ee760a23137fccc517b3e01decd59275124e3f83b049d"
+    },
+    {
+      "file": "ios-09-30.jpg",
+      "video_time_seconds": 570,
+      "sha256": "644f0f31d12dc0c403933fe1b244f8c4d6cde7471cf6c37f3e2db1a6bd9f79ed"
+    },
+    {
+      "file": "ios-09-50.jpg",
+      "video_time_seconds": 590,
+      "sha256": "6179a25bf425d96132e6bbfb84d358300492ce406580b38333c87689be438bce"
+    },
+    {
+      "file": "ios-10-00.jpg",
+      "video_time_seconds": 600,
+      "sha256": "f8508591d8e1d253b374ad2e72d6279e0f6c3d8206289e4ae929281711015b68"
+    },
+    {
+      "file": "ios-11-55.jpg",
+      "video_time_seconds": 715,
+      "sha256": "fd266aa202c58c971d097490f22e0ba9e5285263829a859f48046053a851ca45"
+    },
+    {
+      "file": "ios-12-00.jpg",
+      "video_time_seconds": 720,
+      "sha256": "34602dfe2f6181cc910d032d84650bb30c9fbe60336a0ad9a1ad158f8bb92899"
+    },
+    {
+      "file": "ios-12-15.jpg",
+      "video_time_seconds": 735,
+      "sha256": "f7122934763c35620014698b057d1e449659bebacdd35ab5edd8159f21c22ecb"
+    },
+    {
+      "file": "ios-12-30.jpg",
+      "video_time_seconds": 750,
+      "sha256": "01db889e9bc1de9f3599e704e6f27dcca23ef6075a289e499409c1576297905a"
+    },
+    {
+      "file": "ios-12-40.jpg",
+      "video_time_seconds": 760,
+      "sha256": "cb141e8895f22ad7372e5b86bf4fda098e7b4e9f735c8104946111ad7a66307f"
+    },
+    {
+      "file": "ios-12-55.jpg",
+      "video_time_seconds": 775,
+      "sha256": "4451f08b32dfe8c82f2bf538aa4d2932bc31b64bc4a3e27f54f9c78b0ea65c8b"
+    },
+    {
+      "file": "ios-13-20.jpg",
+      "video_time_seconds": 800,
+      "sha256": "83c7e6841ea52b71538fa8e1a7356171e5ae61f7c1151b489e0794387524e778"
+    },
+    {
+      "file": "ios-13-30.jpg",
+      "video_time_seconds": 810,
+      "sha256": "feb89ab5a1bb384520b6e6a2306f45fa6198a113a29817eab362880962db2f17"
+    },
+    {
+      "file": "ios-13-45.jpg",
+      "video_time_seconds": 825,
+      "sha256": "574272b38bd00cf5297ecb1b520f8c24df813c173df5d9621228bf00985b5f5e"
+    },
+    {
+      "file": "ios-14-00.jpg",
+      "video_time_seconds": 840,
+      "sha256": "2e96c7fd87b642d2795f7ed4ac6fd7c074bfdef3927ed57abe9ff0b72866df54"
+    },
+    {
+      "file": "ios-14-30.jpg",
+      "video_time_seconds": 870,
+      "sha256": "a2fad0fb0ab78b575c42a61d4be1facd24dd89682e39ec7b3db84cfde763bfad"
+    },
+    {
+      "file": "ios-14-57.jpg",
+      "video_time_seconds": 897,
+      "sha256": "b3799519877f113979f43185cd510691680403cdd45b9a6db18e33fb3e52c704"
+    },
+    {
+      "id": 0,
+      "file": "reference-00.webp",
+      "source": "https://media.screensdesign.com/avs-pp-640/ec19ccd0a5f44b2a84ccb77bd0daf328.webp",
+      "alt": "FocusFlight - Deepfocus Timer screenshot 1",
+      "size": [
+        640,
+        1384
+      ]
+    },
+    {
+      "id": 1,
+      "file": "reference-01.webp",
+      "source": "https://media.screensdesign.com/avs-pp-640/6d610178d5d9410db0eb7d33c9c183bf.webp",
+      "alt": "FocusFlight - Deepfocus Timer screenshot 2",
+      "size": [
+        640,
+        1384
+      ]
+    },
+    {
+      "id": 2,
+      "file": "reference-02.webp",
+      "source": "https://media.screensdesign.com/avs-pp-640/7e06aaf4ea8b4d5f8e8c2535468e739b.webp",
+      "alt": "FocusFlight - Deepfocus Timer screenshot 3",
+      "size": [
+        640,
+        1384
+      ]
+    },
+    {
+      "id": 3,
+      "file": "reference-03.webp",
+      "source": "https://media.screensdesign.com/avs-pp-640/ef6d63738c18400895410607fa1c36ec.webp",
+      "alt": "FocusFlight - Deepfocus Timer screenshot 4",
+      "size": [
+        640,
+        1384
+      ]
+    },
+    {
+      "id": 4,
+      "file": "reference-04.webp",
+      "source": "https://media.screensdesign.com/avs-pp-640/36c7cbb99ddd4e97a34e9342e0f75b40.webp",
+      "alt": "FocusFlight - Deepfocus Timer screenshot 5",
+      "size": [
+        640,
+        1384
+      ]
+    },
+    {
+      "id": 5,
+      "file": "reference-05.webp",
+      "source": "https://media.screensdesign.com/avs-pp-640/139f01e02cb04edfa40249fa1f0917c5.webp",
+      "alt": "FocusFlight - Deepfocus Timer screenshot 6",
+      "size": [
+        640,
+        1384
+      ]
+    },
+    {
+      "id": 6,
+      "file": "reference-06.webp",
+      "source": "https://media.screensdesign.com/avs-pp-640/3b760824d94c40e3af5c8ef0656a98f9.webp",
+      "alt": "FocusFlight - Deepfocus Timer screenshot 7",
+      "size": [
+        640,
+        1384
+      ]
+    },
+    {
+      "id": 7,
+      "file": "reference-07.webp",
+      "source": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/a1/bb/9a/a1bb9ac0-4a76-bfaa-8152-c28c15d0b118/iPhone-EN-1.jpg/460x998bb.webp",
+      "alt": "",
+      "size": [
+        459,
+        998
+      ]
+    },
+    {
+      "id": 9,
+      "file": "reference-09.webp",
+      "source": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/cf/6c/c7/cf6cc7d9-5a39-ff46-6d59-bc2ca739e471/iPhone-EN-2.jpg/460x998bb.webp",
+      "alt": "",
+      "size": [
+        459,
+        998
+      ]
+    },
+    {
+      "id": 11,
+      "file": "reference-11.webp",
+      "source": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/e7/92/cc/e792ccff-f04f-a536-8bd0-4fe7abaa98b3/iPhone-EN-3.jpg/460x998bb.webp",
+      "alt": "",
+      "size": [
+        459,
+        998
+      ]
+    },
+    {
+      "id": 13,
+      "file": "reference-13.webp",
+      "source": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/c3/e2/b0/c3e2b020-e355-5390-886f-16de4a8b7576/iPhone-EN-4.jpg/460x998bb.webp",
+      "alt": "",
+      "size": [
+        459,
+        998
+      ]
+    },
+    {
+      "id": 15,
+      "file": "reference-15.webp",
+      "source": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/d6/64/a9/d664a9de-3c15-080f-5902-7a109df7f5da/iPhone-EN-5.jpg/460x998bb.webp",
+      "alt": "",
+      "size": [
+        459,
+        998
+      ]
+    },
+    {
+      "id": 17,
+      "file": "reference-17.webp",
+      "source": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/ed/e0/b3/ede0b328-bf3f-d91e-9ea6-6755034919d5/iPhone-EN-6.jpg/460x998bb.webp",
+      "alt": "",
+      "size": [
+        459,
+        998
+      ]
+    },
+    {
+      "file": "ios-04-40.jpg",
+      "video_time_seconds": 280,
+      "sha256": "de2dc77b3dbd0b64514b654663ac104e31753570b7127451d1cee6105c90894e"
+    }
+  ]
+}

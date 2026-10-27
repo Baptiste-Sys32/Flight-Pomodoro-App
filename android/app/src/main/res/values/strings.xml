@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Focus Flight - A timer for geeks</string>
+    <string name="timer_channel">Focus flight</string>
+    <string name="arrival_channel">Arrivals</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="cancel">Give up</string>
+    <string name="flight_complete">You have landed</string>
+    <string name="flight_complete_body">Your focus session is saved in FlightLog.</string>
+</resources>

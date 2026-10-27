@@ -7,10 +7,23 @@ build/
 .cache/
 .parcel-cache/
 .vite/
+.gradle/
+.kotlin/
+local.properties
+captures/
 
-.env
-.env.*
-!.env.example
+.env*
+*.pem
+*.key
+*secret*
+*token*
+auth.json
+credentials
+*.keystore
+
+# Supplied comparison binaries and raw reverse-engineering outputs stay local.
+*.apk
+*.xapk
 
 *.log
 npm-debug.log*

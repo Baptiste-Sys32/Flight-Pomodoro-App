@@ -1,0 +1,168 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "ce273584b8b39b3030e67e6e70b4be11",
+    "entities": [
+      {
+        "tableName": "flights",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `departureCode` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureLat` REAL NOT NULL, `departureLon` REAL NOT NULL, `arrivalCode` TEXT NOT NULL, `arrivalCity` TEXT NOT NULL, `arrivalLat` REAL NOT NULL, `arrivalLon` REAL NOT NULL, `durationMs` INTEGER NOT NULL, `distanceMeters` INTEGER NOT NULL, `category` TEXT NOT NULL, `seat` TEXT NOT NULL, `randomRoute` INTEGER NOT NULL, `state` TEXT NOT NULL, `remainingAtAnchorMs` INTEGER NOT NULL, `anchorElapsedMs` INTEGER NOT NULL, `anchorWallMs` INTEGER NOT NULL, `anchorBoot` INTEGER NOT NULL, `startedWallMs` INTEGER NOT NULL, `endedWallMs` INTEGER, `creditedFocusMs` INTEGER NOT NULL, `creditedDistanceMeters` INTEGER NOT NULL, `note` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "departureCode",
+            "columnName": "departureCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "departureCity",
+            "columnName": "departureCity",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "departureLat",
+            "columnName": "departureLat",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "departureLon",
+            "columnName": "departureLon",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "arrivalCode",
+            "columnName": "arrivalCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "arrivalCity",
+            "columnName": "arrivalCity",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "arrivalLat",
+            "columnName": "arrivalLat",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "arrivalLon",
+            "columnName": "arrivalLon",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "durationMs",
+            "columnName": "durationMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "distanceMeters",
+            "columnName": "distanceMeters",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "seat",
+            "columnName": "seat",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "randomRoute",
+            "columnName": "randomRoute",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remainingAtAnchorMs",
+            "columnName": "remainingAtAnchorMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anchorElapsedMs",
+            "columnName": "anchorElapsedMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anchorWallMs",
+            "columnName": "anchorWallMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anchorBoot",
+            "columnName": "anchorBoot",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startedWallMs",
+            "columnName": "startedWallMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endedWallMs",
+            "columnName": "endedWallMs",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "creditedFocusMs",
+            "columnName": "creditedFocusMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "creditedDistanceMeters",
+            "columnName": "creditedDistanceMeters",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ce273584b8b39b3030e67e6e70b4be11')"
+    ]
+  }
+}

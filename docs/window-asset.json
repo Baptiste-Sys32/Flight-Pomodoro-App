@@ -1,0 +1,7 @@
+{
+  "mode": "built-in image_gen",
+  "generated_on": "2026-10-27",
+  "asset": "android/app/src/main/res/drawable-nodpi/window_frame.png",
+  "prompt": "Use case: product-mockup. Asset type: original transparent cutout for a native Android study timer, a photorealistic passenger airplane window frame. Primary request: create a single front-facing vertically elongated rounded airplane porthole bezel, photographed straight-on from a dark cabin. Dark charcoal matte moulded surround, subtle fine plastic grain, deep recessed silver-grey inner rim, gentle soft reflected warm light. Entire window frame fully inside canvas with generous transparent margin. The aperture through the window must be completely transparent, as must the outside background, so a moving sky can be rendered behind it. No glass pane, no scenery, no clouds, no reflections covering the transparent opening. Symmetrical, realistic soft material shading, premium calm understated atmosphere. Portrait composition, no cabin furniture, no buttons, no logos, no text, no watermark, no UI, no branding. This is a new original asset, not an existing application's artwork.",
+  "validation": "RGBA image; center aperture alpha is zero. Original generated asset, no reference app asset used."
+}
