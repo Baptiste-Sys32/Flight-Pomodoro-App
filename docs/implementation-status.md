@@ -19,6 +19,7 @@ Phase 2 approved by the user on 2026-10-27. Work is in progress. No full-feature
 - If a cancellation races after the deadline, the completed session is preserved.
 - Exact-alarm denial falls back to an inexact alarm. Correct elapsed state remains recoverable, but precise background notification timing is degraded.
 - A boot receiver reconciles and schedules an alarm; it does not start an unrequested foreground service from boot.
+- Ongoing notification progress refreshes every 1-5 seconds depending on flight length; short diagnostic sessions receive intermediate updates. The native chronometer displays the countdown between reposts.
 
 ## Validation ledger
 
@@ -34,6 +35,8 @@ Phase 2 approved by the user on 2026-10-27. Work is in progress. No full-feature
 | Secrets and ignores | Local map configuration, generated BuildConfig, APKs and build directories are ignored; credential is not committed |
 
 The temporary timer screen was visually inspected on the S24 Ultra. It is a clock/service milestone, not the final iOS-matched UI. The initial Compose test attempt on API 37 failed inside Espresso's removed InputManager.getInstance dependency; the service harness works there, while the Compose smoke test is restricted to API 36 and below. No app behavior is declared verified by that framework failure.
+
+User-reported notification progress issue: a fixed 15-second repost interval gave the 15-second diagnostic flight no intermediate update. Replaced with an adaptive 1-5 second interval. The device regression now captures the current active notification progress and requires a later increase of more than 20/1000 before completion. Passed on API 36. A phone rerun refused to create a second flight because the user's session was already active; no cancellation or overwrite was performed. The updated build is installed on the phone.
 
 ## Pending
 

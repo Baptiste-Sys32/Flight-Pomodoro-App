@@ -44,7 +44,9 @@ class FlightTimerService : Service() {
                 return
             }
             val now = android.os.SystemClock.elapsedRealtime()
-            if (now - lastUpdate >= 15_000) {
+            // Short flights still need intermediate progress; long flights need no per-second repost.
+            val notificationInterval = (s.durationMs / 250).coerceIn(1000L, 5000L)
+            if (s.state == "ACTIVE" && now - lastUpdate >= notificationInterval) {
                 NotificationManagerCompat.from(app).notify(TimerPlatform.SESSION_NOTIFICATION, TimerPlatform.notification(app, s))
                 lastUpdate = now
             }
