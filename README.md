@@ -16,7 +16,7 @@ cd android
 
 Device tests require one explicitly selected device, or configure `ANDROID_SERIAL` for the desired ADB target. The UI test currently runs on API 36 and below because the installed Espresso version uses an input API removed on API 37. Persistence and service tests run on both.
 
-Debug APK: `android/app/build/outputs/apk/debug/app-debug.apk`. It is ignored by Git. Do not publish this personal build. Map configuration instructions: [map-setup.md](docs/map-setup.md).
+Phone debug APK: `android/app/build/outputs/apk/debug/app-arm64-v8a-debug.apk`. Emulator APK: `app-x86_64-debug.apk` in the same directory. Both are ignored by Git. Do not publish this personal build. Map configuration instructions: [map-setup.md](docs/map-setup.md).
 
 ## Assets
 

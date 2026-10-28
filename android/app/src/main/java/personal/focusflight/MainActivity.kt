@@ -5,7 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.compose.BackHandler
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.SystemBarStyle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,20 +29,45 @@ import personal.focusflight.data.local.Airport
 import personal.focusflight.domain.session.SessionClock
 import personal.focusflight.platform.timer.FlightTimerService
 import personal.focusflight.platform.timer.TimerPlatform
+import personal.focusflight.data.preferences.AppPrefs
+import personal.focusflight.data.preferences.PreferenceRepository
+import personal.focusflight.ui.FlightDeck
+import personal.focusflight.ui.components.FocusTheme
 
 class MainActivity : ComponentActivity() {
     private val app get() = application as FlightApplication
+    private val preferences by lazy { PreferenceRepository(this) }
     private val notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT))
         setContent {
+            var rendererPreview by remember { mutableStateOf(BuildConfig.DEBUG && intent.getBooleanExtra("renderer_preview", false)) }
+            BackHandler(enabled = rendererPreview) { rendererPreview = false }
+            if (rendererPreview) {
+                personal.focusflight.map.RendererPreview(intent.getStringExtra("renderer_scene") ?: "globe") { rendererPreview = false }
+                return@setContent
+            }
             val flights by app.repository.flights.collectAsStateWithLifecycle(emptyList())
+            val prefs by preferences.flow.collectAsStateWithLifecycle(AppPrefs())
             val flight = flights.firstOrNull { it.isOngoing }
+            DisposableEffect(flight?.id, prefs.keepAwake) {
+                if (flight != null && prefs.keepAwake) window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                onDispose { window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+            }
             var now by remember { mutableStateOf(app.clock()) }
             LaunchedEffect(Unit) { while (true) { now = app.clock(); delay(250) } }
             val remaining = flight?.let { SessionClock.remaining(it.anchor(), now) } ?: 25 * 60_000L
+            if (flight != null) {
+                FocusTheme {
+                    FlightDeck(flight, remaining, prefs, ::command,
+                        { mode, labels, terrain, buildings -> lifecycleScope.launch { preferences.map(mode, labels, terrain, buildings) } },
+                        { enabled -> lifecycleScope.launch { preferences.awake(enabled) } })
+                }
+                return@setContent
+            }
             MaterialTheme(colorScheme = darkColorScheme(primary = Color(0xFFF4E582), background = Color(0xFF101312))) {
                 Column(Modifier.fillMaxSize().background(Color(0xFF101312)).safeDrawingPadding().padding(28.dp),
                     horizontalAlignment = Alignment.CenterHorizontally) {
@@ -55,6 +82,7 @@ class MainActivity : ComponentActivity() {
                     if (flight == null) {
                         Button(onClick = { start(25 * 60_000L) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(50)) { Text("Start focus flight") }
                         if (BuildConfig.DEBUG) TextButton(onClick = { start(15_000) }) { Text("15-second test flight") }
+                        if (BuildConfig.DEBUG) TextButton(onClick = { rendererPreview = true }) { Text("Renderer check") }
                     } else {
                         Button(onClick = { command(if (flight.state == "PAUSED") "RESUME" else "PAUSE") }, modifier = Modifier.fillMaxWidth()) {
                             Text(if (flight.state == "PAUSED") "Resume" else "Pause")
@@ -65,6 +93,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
         lifecycleScope.launch {
             app.repository.completeDue()?.let { TimerPlatform.arrival(app, it) }
             app.repository.ongoing()?.let { command("SYNC") }

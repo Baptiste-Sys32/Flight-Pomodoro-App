@@ -1,0 +1,5 @@
+{
+  "mode": "built-in image_gen",
+  "asset": "android/app/src/main/res/drawable-nodpi/cloud_sky.png",
+  "prompt": "Use case: photorealistic-natural. Asset type: original background image for an airplane-window focus scene in a private native Android app. Primary request: an exceptionally realistic calm view from cruising altitude above a broad dense sea of soft white cumulus clouds, distant level horizon about one third from the top, clear pale blue sky fading to muted lavender and a very subtle warm pink glow near the horizon. Looking outward through a window, but DO NOT draw the window itself, any frame, any glass, any wing, aircraft or cabin. Wide landscape composition, gently textured cloud tops in foreground and distant atmospheric layers, quiet natural light, neutral photographic exposure, plausible atmosphere and geography-free sky. No dramatic sun, no oversaturated colors, no text, no logos, no watermark, no UI. This is a new original image plate, not an edit or a copy of another application's assets."
+}

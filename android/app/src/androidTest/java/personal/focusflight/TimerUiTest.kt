@@ -16,11 +16,13 @@ class TimerUiTest {
 
     @Test fun visibleControlsStartPauseResumeAndCancel() {
         compose.onNodeWithText("15-second test flight").performClick()
-        compose.waitUntil(5000) { compose.onAllNodesWithText("Pause").fetchSemanticsNodes().isNotEmpty() }
-        compose.onNodeWithText("Pause").performClick()
-        compose.waitUntil(5000) { compose.onAllNodesWithText("Resume").fetchSemanticsNodes().isNotEmpty() }
-        compose.onNodeWithText("Resume").performClick()
-        compose.waitUntil(5000) { compose.onAllNodesWithText("Pause").fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(5000) { compose.onAllNodesWithContentDescription("Pause").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithContentDescription("Pause").performClick()
+        compose.waitUntil(5000) { compose.onAllNodesWithContentDescription("Resume").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithContentDescription("Resume").performClick()
+        compose.waitUntil(5000) { compose.onAllNodesWithContentDescription("Pause").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithContentDescription("Flight options").performClick()
+        compose.onNodeWithText("Give up").performClick()
         compose.onNodeWithText("Give up").performClick()
         compose.waitUntil(5000) { compose.onAllNodesWithText("Start focus flight").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithText("Start focus flight").assertIsDisplayed()
