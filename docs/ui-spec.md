@@ -157,6 +157,10 @@ Landing is documented by the App Store, but a full completed-flight landing sequ
 
 The v2.0 introduction also advertises random mode, new widgets, routes and Shared Flights; Magazine appears as an upcoming feature. Shared Flights operation and Magazine content are unknown. They must not silently become required online services or be claimed implemented based on promotional screens.
 
+## Approved implementation deviations
+
+On 2026-10-28 the user removed satellite imagery entirely. Preserve the source evidence above as research, but implement only Monochrome, Terra and Standard in the map picker. The cloud-window scene remains; the satellite-window scene is omitted. Standard is the default, with readable dark greeting/ruler text on light vector styles. Terrain and buildings remain separate capabilities.
+
 ## Motion and state contract
 
 Observed motion vocabulary: floating scenario tags, map camera travel, sheet expansion, seat highlight, ticket-stub rotation/separation, card reveal and aircraft progression. Exact durations, easing curves, touch latency and haptics are unknown. One-frame-per-second extraction is a navigation aid, not sufficient timing evidence; revisit the original 30 fps clip for each implemented transition.

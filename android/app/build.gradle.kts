@@ -26,6 +26,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures { compose = true; buildConfig = true }
+    sourceSets["androidTest"].assets.srcDir("$projectDir/schemas")
     splits {
         abi {
             isEnable = true

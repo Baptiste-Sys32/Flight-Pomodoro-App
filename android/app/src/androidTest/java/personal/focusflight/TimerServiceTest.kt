@@ -22,7 +22,7 @@ class TimerServiceTest {
         val scenario = ActivityScenario.launch(MainActivity::class.java)
         val s = runBlocking {
             app.repository.start(Airport("CDG", "Paris", 49.0, 2.5), Airport("LHR", "London", 51.47, -.45),
-                15_000, 348_000, "Study", "1A")
+                15_000, 348_000, "Study", "1A", diagnostic = true)
         }
         fun command(action: String) = scenario.onActivity { activity ->
             ContextCompat.startForegroundService(activity, Intent(activity, FlightTimerService::class.java).setAction(action))

@@ -9,10 +9,11 @@ data class Airport(val code: String, val city: String, val lat: Double, val lon:
 
 class FlightRepository(private val db: FlightDatabase, private val clock: () -> ClockReading) {
     val flights = db.flights().observeAll()
+    val drafts = db.drafts().observeAll()
     suspend fun ongoing() = db.flights().ongoing()
 
     suspend fun start(from: Airport, to: Airport, durationMs: Long, distanceMeters: Long,
-                      category: String, seat: String, random: Boolean = false): FlightSession = db.withTransaction {
+                      category: String, seat: String, random: Boolean = false, diagnostic: Boolean = false): FlightSession = db.withTransaction {
         require(durationMs > 0)
         require(distanceMeters >= 0)
         check(db.flights().ongoing() == null) { "A flight is already in progress" }
@@ -20,8 +21,36 @@ class FlightRepository(private val db: FlightDatabase, private val clock: () -> 
         val s = FlightSession(UUID.randomUUID().toString(), from.code, from.city, from.lat, from.lon,
             to.code, to.city, to.lat, to.lon, durationMs, distanceMeters, category, seat, random,
             remainingAtAnchorMs = durationMs, anchorElapsedMs = now.elapsedMs,
-            anchorWallMs = now.wallMs, anchorBoot = now.boot, startedWallMs = now.wallMs)
+            anchorWallMs = now.wallMs, anchorBoot = now.boot, startedWallMs = now.wallMs, diagnostic = diagnostic)
         db.flights().insert(s)
+        s
+    }
+
+    suspend fun saveDraft(draft: FlightDraft) = db.withTransaction {
+        require(draft.durationMs in 15 * 60_000L..180 * 60_000L)
+        require(draft.distanceMeters >= 0 && draft.departureCode != draft.arrivalCode)
+        check(db.flights().get(draft.id)==null) { "This boarding pass has already been used" }
+        db.drafts().save(draft)
+    }
+
+    suspend fun deleteDraft(id: String) = db.drafts().delete(id)
+
+    /** Convert planning to focus exactly once. The visual takeoff does not own the clock. */
+    suspend fun startDraft(id: String): FlightSession = db.withTransaction {
+        db.flights().get(id)?.let { existing ->
+            check(existing.isOngoing) { "This boarding pass has already been used" }
+            return@withTransaction existing
+        }
+        check(db.flights().ongoing() == null) { "A flight is already in progress" }
+        val d = checkNotNull(db.drafts().get(id)) { "Boarding pass not found" }
+        val now = clock()
+        val s = FlightSession(d.id, d.departureCode, d.departureCity, d.departureLat, d.departureLon,
+            d.arrivalCode, d.arrivalCity, d.arrivalLat, d.arrivalLon, d.durationMs, d.distanceMeters,
+            d.category, d.seat, d.randomRoute, remainingAtAnchorMs = d.durationMs,
+            anchorElapsedMs = now.elapsedMs, anchorWallMs = now.wallMs, anchorBoot = now.boot,
+            startedWallMs = now.wallMs)
+        db.flights().insert(s)
+        db.drafts().delete(id)
         s
     }
 

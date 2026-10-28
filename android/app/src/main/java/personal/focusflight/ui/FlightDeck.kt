@@ -54,9 +54,9 @@ fun FlightDeck(
         Box(Modifier.fillMaxSize().then(if (paused) Modifier.blur(16.dp) else Modifier)) {
             if (window) WindowFocusView(Modifier.fillMaxSize(), paused)
             else FlightMap(MapScene(from, to,
-                airports = if (hiddenDestination) emptyList() else listOf(MapAirport(flight.departureCode, from), MapAirport(flight.arrivalCode, to)),
+                airports = if (hiddenDestination) emptyList() else listOf(MapAirport(flight.departureCode, from,true), MapAirport(flight.arrivalCode, to)),
                 progress = progress, mode = prefs.mapMode, labels = prefs.labels, terrain = prefs.terrain,
-                buildings = prefs.buildings, follow = !overview, bottomInsetDp = 110f), Modifier.fillMaxSize()) { status = it }
+                buildings = prefs.buildings, follow = !overview, bottomInsetDp = 110f,showRoute=!hiddenDestination), Modifier.fillMaxSize()) { status = it }
         }
         Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Black.copy(alpha=.15f), Color.Transparent,
             Color.Transparent, Color.Black.copy(alpha=.7f)))))
@@ -168,9 +168,9 @@ fun MapStylePanel(prefs: AppPrefs, close: () -> Unit, change: (MapMode?, Boolean
 private fun MapStyleSwatch(mode: MapMode, modifier: Modifier) {
     Canvas(modifier) {
         val sea = when(mode) { MapMode.MONOCHROME -> Color(0xFFC7CACA); MapMode.TERRA -> Color(0xFF101715)
-            MapMode.STANDARD -> Color(0xFF8EC9D2); MapMode.SATELLITE -> Color(0xFF153B46) }
+            MapMode.STANDARD -> Color(0xFF8EC9D2) }
         val land = when(mode) { MapMode.MONOCHROME -> Color(0xFFE6E7E3); MapMode.TERRA -> Color(0xFF303A34)
-            MapMode.STANDARD -> Color(0xFFB4CB97); MapMode.SATELLITE -> Color(0xFF416247) }
+            MapMode.STANDARD -> Color(0xFFB4CB97) }
         drawRect(sea)
         val p=Path().apply { moveTo(0f,0f);lineTo(size.width*.8f,0f);cubicTo(size.width*.2f,size.height*.3f,size.width*.9f,size.height*.5f,size.width*.45f,size.height*.7f);lineTo(size.width*.3f,size.height);lineTo(0f,size.height);close() }
         drawPath(p,land)

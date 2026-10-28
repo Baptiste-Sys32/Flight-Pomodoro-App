@@ -44,14 +44,14 @@ User-reported notification progress issue: a fixed 15-second repost interval gav
 
 ## Map and flight-screen milestone
 
-- Native Mapbox globe, Standard/Monochrome/Terra/Satellite choices, labels, DEM terrain and 3D-building controls. The style names follow the observed menu; map cartography and Terra's night styling are provider substitutes, not pixel-identical Apple Maps.
+- Native Mapbox globe, Standard/Monochrome/Terra choices (satellite was later omitted at the user's request), labels, DEM terrain and 3D-building controls. The style names follow the observed menu; map cartography and Terra's night styling are provider substitutes, not pixel-identical Apple Maps.
 - Actual session progress drives the great-circle route, aircraft and remaining distance. Follow view and route overview share the persisted clock. Pausing dims/blurs the scene without advancing progress.
 - Original procedural glTF aircraft, original generated window and cloud plate, and independently licensed Inter font. Map attribution stays visible.
 - A non-indexed mesh triggered a native Mapbox worker crash in the emulator. Explicit 16-bit indices fixed the observed failure. LOCATION_INDICATOR rendering makes the model visible above buildings; placement and orientation were checked in a river scene.
-- The renderer test waits for the fully loaded map, not just accepted style JSON. Passed on the S24 Ultra. Globe and detailed Paris 3D buildings were visually inspected there; the original window and aircraft were inspected in the API 36 emulator.
+- Renderer tests observe the map-loaded callback plus style/layer checks. Passed on the S24 Ultra; this does not prove every network layer succeeded (see the provider blocker below). Globe and detailed Paris 3D buildings were visually inspected there; the original window and aircraft were inspected in the API 36 emulator.
 - The revised API 36 UI regression starts a diagnostic flight, pauses, resumes, confirms cancellation and returns to the ready screen. Passed after connecting the flight screen.
 
-The ready screen is still temporary. The boarding flow, source-matched home, audio controls, logs and other feature-map entries remain pending. Elevated globe arcs, complete style/terrain combinations, antimeridian rendering, animation fidelity, offline cache behavior and battery measurements are not yet verified.
+At that milestone the ready screen was temporary. The boarding milestone below replaces it; audio and the remaining feature-map entries are still pending. Elevated globe arcs, complete style/terrain combinations, antimeridian rendering, animation fidelity, offline cache behavior and battery measurements are not yet verified.
 
 ## Pending
 
@@ -59,3 +59,23 @@ The ready screen is still temporary. The boarding flow, source-matched home, aud
 - Licensed or original audio.
 - Landing choreography; local membership rules are now approved and documented in local-rules.md.
 - All remaining feature-map entries and Samsung-specific permission/launcher checks.
+
+
+## Boarding and saved-pass milestone
+
+- Home now uses the observed map, greeting/city, Start Journey capsule and Mine/Trends/World panel hierarchy. The temporary timer-only screen is removed.
+- Manual/random starting-airport selection, destination search and snapping cards, curved duration ruler, the A/C and D/F cabin, four seat-based focus types, a persisted pass and decorative stub tear, and the pale takeoff interstitial are connected.
+- The countdown starts on GO. A Room transaction converts a planned pass to one active session. Concurrent starts reuse that session; a completed/canceled pass cannot return to planning.
+- Room v1-to-v2 migration preserves existing records, notes and clock anchors. The exact old 15-second fixture is marked diagnostic; future service fixtures carry that flag explicitly. Logs and summaries exclude diagnostics.
+- Initial FlightLog supports planning/state/scenario filters, date ordering, persisted pass access and record notes. Mine, Trends and World currently expose only initial local data views. Their complete source-matched charts, membership collection and world history are pending.
+- Activity recreation at the boarding-pass stage preserves the route, seat and pass. Backgrounded or paused UI stops its high-frequency clock polling; the service owns timing throughout.
+- API 36: two boarding/migration tests and the full UI flow passed. The UI flow waits for rendered map state, selects seat 03F/Work, recreates the Activity, boards, starts, changes to window view, pauses/resumes, and confirms cancellation. Screen captures were inspected against the public iOS stills. Exact source motion curves remain unknown.
+- Standard style selection and the labels configuration have dedicated SDK tests. Standard is the new default; old saved satellite preferences fall back to Standard without resetting other data. The map picker exposes only Monochrome, Terra and Standard.
+
+Latest validation: debug app/test APK builds and all 10 clock/geography unit tests passed. The five-test vector-map/boarding suite passed. After the final route styling change, the expanded end-to-end UI test passed again, including FlightLog filtering, saving a note and verifying it after Activity recreation. Physical-device validation of this boarding revision is pending; the last phone check found it locked.
+
+### Approved map scope change
+
+Satellite raster requests return HTTP 429, including from the native SDK. A single diagnostic tile request also returned 429 with a provider limit header of -1; the cause is not verified. Style metadata and vector maps remain accessible. The user then explicitly removed satellite imagery from scope on 2026-10-28. No account action, paid service or alternative billing product is required for satellite.
+
+Satellite imagery and the satellite-window scene are omitted by approval. No satellite tile source or picker option remains in the app. The app retains a limited-map notice and retry action for real provider failures. Terrain availability is checked separately; vector buildings and globe do not depend on satellite imagery.

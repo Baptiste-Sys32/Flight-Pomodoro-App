@@ -28,8 +28,10 @@ val Ink = Color(0xFF141716)
 val Paper = Color(0xFFF2F2EA)
 val FlightYellow = Color(0xFFF0D95D)
 val Glass = Color(0xDA1B201E)
-val Inter = FontFamily(Font(R.font.inter_variable, FontWeight.Normal), Font(R.font.inter_variable, FontWeight.Medium),
-    Font(R.font.inter_variable, FontWeight.SemiBold), Font(R.font.inter_variable, FontWeight.Bold))
+@OptIn(androidx.compose.ui.text.ExperimentalTextApi::class)
+val Inter = FontFamily(*listOf(FontWeight.Normal,FontWeight.Medium,FontWeight.SemiBold,FontWeight.Bold).map {weight->
+    Font(R.font.inter_variable,weight,variationSettings=FontVariation.Settings(FontVariation.weight(weight.weight)))
+}.toTypedArray())
 
 @Composable
 fun FocusTheme(content: @Composable () -> Unit) {
@@ -45,7 +47,7 @@ fun FocusTheme(content: @Composable () -> Unit) {
 }
 
 enum class Glyph { BACK, CLOSE, PAUSE, PLAY, PLANE, SOUND, WINDOW, GLOBE, MAP, ROUTE, SEARCH, SHUFFLE,
-    LOCATION, SETTINGS, BOOK, LAPTOP, PALETTE, NOTE, CHART, CARD, FILTER, PLUS, CHECK, CHEVRON, TRASH }
+    LOCATION, SETTINGS, BOOK, LAPTOP, PALETTE, NOTE, CHART, CARD, FILTER, PLUS, CHECK, CHEVRON, TRASH, STUDY }
 
 @Composable
 fun FlightIcon(glyph: Glyph, color: Color = Color.White, modifier: Modifier = Modifier.size(20.dp)) {
@@ -76,6 +78,7 @@ fun FlightIcon(glyph: Glyph, color: Color = Color.White, modifier: Modifier = Mo
                 Glyph.LOCATION -> { drawCircle(color,7f,Offset(12f,12f),style=stroke);drawCircle(color,2.5f,Offset(12f,12f));line(12f,1f,12f,5f);line(12f,19f,12f,23f);line(1f,12f,5f,12f);line(19f,12f,23f,12f) }
                 Glyph.SETTINGS -> { drawCircle(color,6.8f,Offset(12f,12f),style=stroke);drawCircle(color,2.8f,Offset(12f,12f),style=stroke);for(i in 0..7) { val a=i*Math.PI/4;line((12+7*kotlin.math.cos(a)).toFloat(),(12+7*kotlin.math.sin(a)).toFloat(),(12+10*kotlin.math.cos(a)).toFloat(),(12+10*kotlin.math.sin(a)).toFloat()) } }
                 Glyph.BOOK -> { path(3f to 4f,9f to 4f,12f to 6f,15f to 4f,21f to 4f,21f to 20f,15f to 20f,12f to 22f,9f to 20f,3f to 20f,close=true);line(12f,6f,12f,22f) }
+                Glyph.STUDY -> {path(2f to 8f,12f to 3f,22f to 8f,12f to 13f,close=true);path(6f to 11f,6f to 17f,12f to 20f,18f to 17f,18f to 11f);line(22f,8f,22f,16f)}
                 Glyph.LAPTOP -> { drawRoundRect(color,Offset(4f,4f),Size(16f,13f),CornerRadius(1f),style=stroke);path(4f to 17f,1f to 21f,23f to 21f,20f to 17f,close=true) }
                 Glyph.PALETTE -> { drawOval(color,Offset(3f,3f),Size(18f,17f),style=stroke);drawCircle(color,1.3f,Offset(8f,8f));drawCircle(color,1.3f,Offset(14f,7f));drawCircle(color,1.3f,Offset(17f,12f));drawCircle(color,2.5f,Offset(10f,16f),style=stroke) }
                 Glyph.NOTE -> { drawRoundRect(color,Offset(4f,3f),Size(16f,19f),CornerRadius(2f),style=stroke);line(8f,8f,16f,8f);line(8f,12f,16f,12f);line(8f,16f,13f,16f) }
@@ -115,7 +118,7 @@ fun GlassPanel(modifier: Modifier = Modifier, content: @Composable ColumnScope.(
 }
 
 data class FocusKind(val name: String,val glyph: Glyph,val color: Color)
-val FocusKinds = listOf(FocusKind("Study",Glyph.BOOK,Color(0xFF9CC7AA)), FocusKind("Work",Glyph.LAPTOP,Color(0xFFB1A1DD)),
+val FocusKinds = listOf(FocusKind("Study",Glyph.STUDY,Color(0xFF9DBED5)), FocusKind("Work",Glyph.LAPTOP,Color(0xFFB1A1DD)),
     FocusKind("Reading",Glyph.BOOK,Color(0xFF95CEAE)),FocusKind("Creative",Glyph.PALETTE,Color(0xFFDDC58D)))
 
 fun focusKind(name: String) = FocusKinds.firstOrNull { it.name.equals(name,true) } ?: FocusKind(name,Glyph.PLUS,Color(0xFF9DBED5))

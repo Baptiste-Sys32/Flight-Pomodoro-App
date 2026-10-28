@@ -54,8 +54,8 @@ fun FlightPass(ticket: TicketData, unit: DistanceUnit, modifier: Modifier = Modi
                 }
                 Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
-                        Text(ticket.fromCode,color=foreground,fontSize=34.sp,fontWeight=FontWeight.Bold,letterSpacing=(-1).sp)
-                        Text(ticket.fromCity,color=muted,fontSize=10.sp,maxLines=1,overflow=TextOverflow.Ellipsis)
+                        Text(ticket.fromCode,color=foreground,fontSize=38.sp,fontWeight=FontWeight.Bold,letterSpacing=(-1).sp)
+                        Text(ticket.fromCity,color=muted,fontSize=12.sp,maxLines=1,overflow=TextOverflow.Ellipsis)
                     }
                     Column(horizontalAlignment=Alignment.CenterHorizontally,modifier=Modifier.padding(horizontal=9.dp)) {
                         FlightIcon(Glyph.PLANE,muted,Modifier.size(16.dp))
@@ -63,8 +63,8 @@ fun FlightPass(ticket: TicketData, unit: DistanceUnit, modifier: Modifier = Modi
                         Text(shortDuration(ticket.minutes),color=muted,fontSize=10.sp)
                     }
                     Column(Modifier.weight(1f),horizontalAlignment=Alignment.End) {
-                        Text(ticket.toCode,color=foreground,fontSize=34.sp,fontWeight=FontWeight.Bold,letterSpacing=(-1).sp)
-                        Text(ticket.toCity,color=muted,fontSize=10.sp,maxLines=1,overflow=TextOverflow.Ellipsis)
+                        Text(ticket.toCode,color=foreground,fontSize=38.sp,fontWeight=FontWeight.Bold,letterSpacing=(-1).sp)
+                        Text(ticket.toCity,color=muted,fontSize=12.sp,maxLines=1,overflow=TextOverflow.Ellipsis)
                     }
                 }
                 Spacer(Modifier.height(22.dp))
@@ -94,8 +94,8 @@ fun FlightPass(ticket: TicketData, unit: DistanceUnit, modifier: Modifier = Modi
 @Composable
 private fun PassField(label: String,value: String,color: Color,end: Boolean=false) {
     Column(horizontalAlignment=if(end) Alignment.End else Alignment.Start) {
-        Text(label,color=color.copy(alpha=.4f),fontSize=9.sp)
-        Text(value,color=color,fontWeight=FontWeight.SemiBold,fontSize=12.sp)
+        Text(label,color=color.copy(alpha=.4f),fontSize=11.sp)
+        Text(value,color=color,fontWeight=FontWeight.SemiBold,fontSize=14.sp)
     }
 }
 
@@ -104,12 +104,12 @@ private fun PassField(label: String,value: String,color: Color,end: Boolean=fals
 fun TicketBarcode(value: String,modifier: Modifier=Modifier) {
     Canvas(modifier) {
         drawRect(Color.White)
-        val unit=size.width/116f
+        val unit=size.width/228f
         val rowHeight=size.height/8f
         var seed=value.hashCode()
         for(row in 0..7) {
             var column=8
-            while(column<108) {
+            while(column<220) {
                 seed=seed*1664525+1013904223
                 val width=1+((seed ushr 20) and 3)
                 if((seed ushr 28) and 1 == 1) drawRect(Color.Black,Offset(column*unit,row*rowHeight),Size(width*unit,rowHeight))
@@ -117,6 +117,6 @@ fun TicketBarcode(value: String,modifier: Modifier=Modifier) {
             }
         }
         drawRect(Color.Black,Offset(unit,0f),Size(4*unit,size.height))
-        drawRect(Color.Black,Offset(110*unit,0f),Size(2*unit,size.height))
+        drawRect(Color.Black,Offset(222*unit,0f),Size(2*unit,size.height))
     }
 }

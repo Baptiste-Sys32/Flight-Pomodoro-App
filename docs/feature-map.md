@@ -1,6 +1,6 @@
 # Feature evidence and Android mapping
 
-Phase 1, researched 2026-10-27. Nothing below is implemented by this planning change. D = documented by the [iOS App Store](https://apps.apple.com/us/app/focusflight-deepfocus-timer/id6648771147); V = visible in the [iOS capture](https://screensdesign.com/apps/focusflight-deepfocus-timer/); U = unknown. See ui-spec.md for individual visual references. APK findings are comparison evidence only. Android mechanisms are proposed architecture, not proof of working parity.
+Phase 1, researched 2026-10-27. This retains the Phase 1 evidence baseline. Current build/test status is in [implementation-status.md](implementation-status.md); approved substitutions are in [local-rules.md](local-rules.md). D = documented by the [iOS App Store](https://apps.apple.com/us/app/focusflight-deepfocus-timer/id6648771147); V = visible in the [iOS capture](https://screensdesign.com/apps/focusflight-deepfocus-timer/); U = unknown. See ui-spec.md for individual visual references. APK findings are comparison evidence only. Android mechanisms are proposed architecture, not proof of working parity.
 
 ## Required platform mappings
 
@@ -25,7 +25,7 @@ Phase 1, researched 2026-10-27. Nothing below is implemented by this planning ch
 | F06 | Airplane Mode | D, V | Permission-led blocking configuration per scenario; optional DND | Android substitute in limits.md |
 | F07 | Website blocking | D | Supported-browser Accessibility prototype or local VPN/domain filter, separately scoped | Neither is universal Screen Time parity; choose coverage explicitly |
 | F08 | Plane advances across world | D, V | Render position from the same session progress as timer and notification | No background render loop; pause is consistent |
-| F09 | Map modes 3D/satellite/classic | D; V four style names | Renderer adapter; retain observed style selection and labels toggle | Provider cost and classic-mode availability |
+| F09 | Map modes 3D/satellite/classic | D; V four style names | Native Standard, Monochrome and Terra, labels toggle, terrain/buildings where available | Satellite explicitly omitted by the user on 2026-10-28 |
 | F10 | Whole-earth and 3D route history | D, V globe | Store route endpoints/geometry and render history on globe | Elevated globe arcs require spike, Mapbox lineZOffset restriction |
 | F11 | Random route, destination discovered at landing | D; V introduction only | Persist one selected route but conceal destination until completion | Selection algorithm/reveal layout U; no midflight reroll |
 | F12 | FlightLog fields | D, V | Endpoint city/code/coordinates, start/end, duration, distance, status, seat, category, notes | Exact detail/share/delete UI U |
@@ -34,7 +34,7 @@ Phase 1, researched 2026-10-27. Nothing below is implemented by this planning ch
 | F15 | White noise, music, airplane ambience | D, V | Licensed local library; panel with switch/volume/selected tile | Original audio and mixing rules unavailable |
 | F16 | Boarding-pass record, flight data, route and duration | D, V ticket | Room session snapshot, no dependency on mutable airport labels | Preserve notes and data across schema migrations |
 | F17 | Portrait focus view | D version history, V | Custom Compose in-flight view | Behavior on orientation changes tested |
-| F18 | Airplane-window view | D, V | Owned window/sky visual, optional geographic scene, native renderer | Scene provenance and geographical synchronization U |
+| F18 | Airplane-window view | D, V | Original window/cloud visual and native flight HUD | Satellite-window scene omitted by the user on 2026-10-28 |
 | F19 | Kilometer and nautical-mile units | Nautical mile D version 1.5.17; units setting V | Default km; optional nmi; canonical meters in storage, nmi = meters / 1852 | Unit formatting everywhere including cards and widgets |
 | F20 | Six languages | D language metadata | Android resources: en, de, ja, ko, zh-Hans, zh-Hant; platform per-app languages | Own translations; CJK font selection and review |
 | F21 | Pause/resume and give up | V | Persist pause offset and cancellation; all views share state | Source pause credit and cancellation dialog U |
@@ -64,7 +64,7 @@ Automatic alternating Pomodoro breaks are not established as iOS behavior. An Ap
 | MapLibre Native | Official roadmap says globe not available for Native; Mercator maps remain useful | Custom style and independently licensed vector/raster sources | Free renderer is not free satellite data. GL JS globe in a WebView would be an explicit hybrid substitute requiring approval. [Roadmap](https://maplibre.org/roadmap/maplibre-gl-js/globe-view/) |
 | Mapbox Native | True globe; official Compose example animates an aircraft and follow camera | Native View or Compose; custom styles and satellite | Elevated lineZOffset explicitly unsupported on globe. Needs alternative geometry spike. Own token/account, current MAU pricing, attribution and telemetry opt-out requirements. [Projection](https://docs.mapbox.com/android/maps/guides/projections/), [aircraft example](https://docs.mapbox.com/android/ja/maps/examples/compose/animated-3d-model/), [line restriction](https://docs.mapbox.com/android/maps/api/latest/mapbox-maps-android/com.mapbox.maps.extension.style.layers.generated/-line-layer/line-z-offset.html), [pricing](https://docs.mapbox.com/android/maps/guides/pricing/) |
 
-Recommendation: compare Google Maps 3D and Mapbox Native with an owned plane model, a short route, an antimeridian route, global and close-up cameras, satellite/classic switching and elevated route history. Inspect battery, attribution, account setup and unavailable-network behavior. Neither has been tested in this repo. Do not promise a renderer until this gate passes; a custom native globe is a larger fallback requiring a revised estimate.
+Recommendation: compare Google Maps 3D and Mapbox Native with an owned plane model, a short route, an antimeridian route, global and close-up cameras, satellite/classic switching and elevated route history. Inspect battery, attribution, account setup and unavailable-network behavior. Mapbox Native has since passed the initial globe/buildings/owned-aircraft spike. Satellite returned HTTP 429 and was explicitly removed from scope by the user on 2026-10-28; complete the remaining vector/globe/terrain checks in implementation-status.md. Google Maps 3D has not been tested in this repo. A custom native globe remains a larger fallback requiring a revised estimate.
 
 ## Completion contract
 

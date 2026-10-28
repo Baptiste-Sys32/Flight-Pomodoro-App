@@ -7,13 +7,19 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.view.Gravity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnLayout
@@ -22,6 +28,7 @@ import com.mapbox.bindgen.Value
 import com.mapbox.common.MapboxOptions
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
@@ -45,9 +52,9 @@ import kotlin.math.ln
 import kotlin.math.cos
 import kotlin.math.hypot
 
-enum class MapMode(val title: String) { MONOCHROME("Monochrome"), TERRA("Terra"), STANDARD("Standard"), SATELLITE("Satellite") }
-enum class MapStatus { LOADING, READY, UNAVAILABLE }
-data class MapAirport(val code: String, val point: GeoPoint)
+enum class MapMode(val title: String) { MONOCHROME("Monochrome"), TERRA("Terra"), STANDARD("Standard") }
+enum class MapStatus { LOADING, READY, LIMITED, UNAVAILABLE }
+data class MapAirport(val code: String, val point: GeoPoint, val departure: Boolean = false)
 data class MapScene(
     val from: GeoPoint,
     val to: GeoPoint? = null,
@@ -61,6 +68,7 @@ data class MapScene(
     val globe: Boolean = false,
     val zoomOverride: Double? = null,
     val bottomInsetDp: Float = 90f,
+    val showRoute: Boolean = true,
 )
 
 @Composable
@@ -70,13 +78,23 @@ fun FlightMap(scene: MapScene, modifier: Modifier = Modifier, onStatus: (MapStat
         return
     }
     val currentCallback by rememberUpdatedState(onStatus)
-    AndroidView(
-        factory = { context -> MapRenderer(context) { currentCallback(it) }.view },
-        modifier = modifier,
-        onReset = null,
-        onRelease = { (it.tag as? MapRenderer)?.close() },
-        update = { (it.tag as MapRenderer).render(scene) },
-    )
+    var state by remember {mutableStateOf(MapStatus.LOADING)}
+    var attempt by remember {mutableIntStateOf(0)}
+    Box(modifier) {
+        key(attempt) {
+            AndroidView(
+                factory = { context -> MapRenderer(context) {state=it;currentCallback(it)}.view },
+                modifier = Modifier.fillMaxSize(),
+                onReset = null,
+                onRelease = { (it.tag as? MapRenderer)?.close() },
+                update = { (it.tag as MapRenderer).render(scene) },
+            )
+        }
+        if(state==MapStatus.LIMITED) Text("Some map layers are unavailable. Tap to retry.",
+            color=Color.White,fontSize=11.sp,
+            modifier=Modifier.align(Alignment.TopCenter).padding(top=135.dp,start=20.dp,end=20.dp)
+                .clip(RoundedCornerShape(12.dp)).background(Color(0xDC16201B)).clickable {attempt++}.padding(12.dp))
+    }
 }
 
 /** Rendering has no authority over elapsed time, completed records or session credit. */
@@ -86,25 +104,41 @@ private class MapRenderer(context: Context, private val status: (MapStatus) -> U
     private var loaded: Style? = null
     private var requestedMode: MapMode? = null
     private var styleOptions: Triple<Boolean, Boolean, Boolean>? = null
-    private var routePair: Pair<GeoPoint, GeoPoint?>? = null
+    private var routePair: Triple<GeoPoint, GeoPoint?, Boolean>? = null
     private var lastCameraKey: List<Any?>? = null
+    private var lastAirports: List<MapAirport>? = null
     private var closed = false
+    private var limited = false
     private val density = context.resources.displayMetrics.density
 
     init {
         MapboxOptions.accessToken = BuildConfig.MAPBOX_ACCESS_TOKEN
-        view = MapView(context, MapInitOptions(context, textureView = true)).also { it.tag = this }
+        view = MapView(context, MapInitOptions(context, styleUri = null, textureView = true)).also { it.tag = this }
         view.compass.updateSettings { enabled = false }
         view.scalebar.updateSettings { enabled = false }
         view.contentDescription = "Flight map loading"
         view.mapboxMap.subscribeMapLoaded {
             if (!closed) {
                 aircraftPose()
-                view.contentDescription = "Flight map ready"
-                status(MapStatus.READY)
+                view.contentDescription = if(limited) "Flight map limited" else "Flight map ready"
+                status(if(limited) MapStatus.LIMITED else MapStatus.READY)
             }
         }
-        view.mapboxMap.subscribeMapLoadingError { if (!closed) status(MapStatus.UNAVAILABLE) }
+        view.mapboxMap.subscribeMapLoadingError { event ->
+            if (!closed) {
+                // Provider URLs can include credentials. Log only a numeric HTTP status.
+                val code=Regex("(?i)(?:http[^0-9]{0,40}|status[^0-9]{0,15})([45][0-9]{2})")
+                    .find(event.message)?.groupValues?.get(1) ?: "unknown"
+                val resource=when {
+                    event.message.contains("terrain",true)->"terrain"
+                    else->"map"
+                }
+                android.util.Log.w("FlightMap","Map resource error: $resource, ${event.type}, HTTP $code")
+                if(code in setOf("401","403","429")) {
+                    limited=true;view.contentDescription="Flight map limited";status(MapStatus.LIMITED)
+                } else status(MapStatus.UNAVAILABLE)
+            }
+        }
         view.mapboxMap.subscribeCameraChanged { if (!closed) aircraftPose() }
         view.doOnLayout { if (!closed) aircraftPose() }
     }
@@ -118,11 +152,12 @@ private class MapRenderer(context: Context, private val status: (MapStatus) -> U
             requestedMode = scene.mode
             loaded = null
             routePair = null
-            lastCameraKey = null
+            lastAirports = null
             styleOptions = null
+            limited = false
             status(MapStatus.LOADING)
             view.contentDescription = "Flight map loading"
-            val uri = if (scene.mode == MapMode.SATELLITE) "mapbox://styles/mapbox/standard-satellite" else "mapbox://styles/mapbox/standard"
+            val uri = Style.STANDARD
             view.mapboxMap.loadStyle(uri) { style ->
                 if (closed || latest?.mode != scene.mode) return@loadStyle
                 loaded = style
@@ -136,37 +171,38 @@ private class MapRenderer(context: Context, private val status: (MapStatus) -> U
         if (options != styleOptions) {
             styleOptions = options
             style.setStyleProjection(json("""{"name":"globe"}"""))
-            style.setStyleImportConfigProperty("basemap", "show3dObjects", Value(scene.buildings))
-            style.setStyleImportConfigProperty("basemap", "show3dBuildings", Value(scene.buildings))
+            configure(style,"show3dObjects",Value(scene.buildings))
+            configure(style,"show3dBuildings",Value(scene.buildings))
             for (property in listOf("showPlaceLabels", "showRoadLabels", "showPointOfInterestLabels", "showTransitLabels")) {
-                style.setStyleImportConfigProperty("basemap", property, Value(scene.labels))
+                configure(style,property,Value(scene.labels))
             }
-            if (scene.mode != MapMode.SATELLITE) {
-                style.setStyleImportConfigProperty("basemap", "theme", Value(if (scene.mode == MapMode.MONOCHROME || scene.mode == MapMode.TERRA) "monochrome" else "default"))
-                style.setStyleImportConfigProperty("basemap", "lightPreset", Value(if (scene.mode == MapMode.TERRA) "night" else "day"))
-            }
+            configure(style,"theme",Value(if (scene.mode == MapMode.MONOCHROME || scene.mode == MapMode.TERRA) "monochrome" else "default"))
+            configure(style,"lightPreset",Value(if (scene.mode == MapMode.TERRA) "night" else "day"))
             style.setStyleTerrain(if (scene.terrain) json("""{"source":"ff-dem","exaggeration":1.2}""") else json("{}"))
         }
-        if (routePair != scene.from to scene.to) {
-            routePair = scene.from to scene.to
+        val routeKey=Triple(scene.from,scene.to,scene.showRoute)
+        if (routePair != routeKey) {
+            routePair = routeKey
             val points = scene.to?.let { FlightRoute.points(scene.from, it) } ?: listOf(scene.from, scene.from)
-            style.setStyleSourceProperty("ff-route", "data", geoLine(points))
+            style.setStyleSourceProperty("ff-route", "data", if(scene.showRoute) geoLine(points)
+                else json("""{"type":"FeatureCollection","features":[]}"""))
         }
-        for (airport in scene.airports) {
-            if (!style.hasStyleImage("ff-${airport.code}")) style.addImage(image("ff-${airport.code}", airportChip(airport.code)))
+        if(lastAirports!=scene.airports) {
+            lastAirports=scene.airports
+            val airports = JSONArray()
+            scene.airports.forEach { airport ->
+                if (!style.hasStyleImage("ff-${airport.code}")) style.addImage(image("ff-${airport.code}", airportChip(airport.code)))
+                airports.put(JSONObject().put("type", "Feature").put("geometry", geometry("Point", coordinates(airport.point)))
+                    .put("properties", JSONObject().put("chip", "ff-${airport.code}").put("departure",airport.departure)))
+            }
+            style.setStyleSourceProperty("ff-airports", "data", json(JSONObject().put("type", "FeatureCollection").put("features", airports).toString()))
         }
-        val airports = JSONArray()
-        scene.airports.forEach { airport ->
-            airports.put(JSONObject().put("type", "Feature").put("geometry", geometry("Point", coordinates(airport.point)))
-                .put("properties", JSONObject().put("chip", "ff-${airport.code}")))
-        }
-        style.setStyleSourceProperty("ff-airports", "data", json(JSONObject().put("type", "FeatureCollection").put("features", airports).toString()))
         val plane = scene.to?.let { FlightRoute.position(scene.from, it, scene.progress ?: 0.0) } ?: scene.from
         style.setStyleSourceProperty("ff-plane", "data", geoPoint(plane))
         val bearing = scene.to?.let { FlightRoute.bearing(plane, it) } ?: 0.0
         style.setStyleLayerProperty("ff-plane-marker", "icon-rotate", Value(bearing))
         style.setStyleLayerProperty("ff-plane-marker", "visibility", Value(if (scene.progress == null) "none" else "visible"))
-        val cameraKey = listOf(scene.from, scene.to, scene.follow, scene.globe, scene.zoomOverride)
+        val cameraKey = listOf(scene.from, scene.to, scene.follow, scene.globe, scene.zoomOverride, scene.bottomInsetDp)
         if (cameraKey != lastCameraKey || scene.follow) {
             lastCameraKey = cameraKey
             val distance = scene.to?.let { FlightRoute.distance(scene.from, it) } ?: 0.0
@@ -183,10 +219,20 @@ private class MapRenderer(context: Context, private val status: (MapStatus) -> U
                 else -> 4.0
             }
             view.mapboxMap.setCamera(CameraOptions.Builder().center(Point.fromLngLat(center.lon, center.lat))
+                .padding(EdgeInsets(0.0,0.0,(scene.bottomInsetDp*density).toDouble(),0.0))
                 .zoom(zoom).pitch(if (scene.follow || scene.zoomOverride != null) 60.0 else 0.0)
                 .bearing(if (scene.follow) bearing else 0.0).build())
         }
         aircraftPose()
+    }
+
+    private fun configure(style: Style,name: String,value: Value) {
+        val scope=when {
+            style.getStyleImportConfigProperty("basemap",name).value!=null->"basemap"
+            style.getStyleImportConfigProperty("",name).value!=null->""
+            else->return
+        }
+        style.setStyleImportConfigProperty(scope,name,value)
     }
 
     private fun initialize(style: Style) {
@@ -194,10 +240,12 @@ private class MapRenderer(context: Context, private val status: (MapStatus) -> U
         style.addStyleSource("ff-route", json("""{"type":"geojson","data":{"type":"FeatureCollection","features":[]}}"""))
         style.addStyleSource("ff-plane", json("""{"type":"geojson","data":{"type":"FeatureCollection","features":[]}}"""))
         style.addStyleSource("ff-airports", json("""{"type":"geojson","data":{"type":"FeatureCollection","features":[]}}"""))
+        style.addStyleLayer(json("""{"id":"ff-route-shadow","type":"line","source":"ff-route","slot":"top","layout":{"line-cap":"round","line-join":"round"},"paint":{"line-color":"#101713","line-width":4.5,"line-opacity":0.28}}"""), null)
         style.addStyleLayer(json("""{"id":"ff-route-line","type":"line","source":"ff-route","slot":"top","layout":{"line-cap":"round","line-join":"round"},"paint":{"line-color":"#FFFFFF","line-width":2.4,"line-opacity":0.85}}"""), null)
         style.addImage(image("ff-plane-icon", ContextCompat.getDrawable(view.context, R.drawable.ic_notification_plane)!!.toBitmap(80, 80)))
-        style.addStyleLayer(json("""{"id":"ff-plane-marker","type":"symbol","source":"ff-plane","slot":"top","layout":{"icon-image":"ff-plane-icon","icon-size":0.6,"icon-allow-overlap":true,"icon-ignore-placement":true,"icon-rotation-alignment":"map"}}"""), null)
-        style.addStyleLayer(json("""{"id":"ff-airport-labels","type":"symbol","source":"ff-airports","slot":"top","layout":{"icon-image":["get","chip"],"icon-size":0.5,"icon-allow-overlap":true,"icon-offset":[0,42]}}"""), null)
+        style.addStyleLayer(json("""{"id":"ff-plane-marker","type":"symbol","source":"ff-plane","slot":"top","layout":{"icon-image":"ff-plane-icon","icon-size":0.35,"icon-allow-overlap":true,"icon-ignore-placement":true,"icon-rotation-alignment":"map"}}"""), null)
+        style.addStyleLayer(json("""{"id":"ff-departure-marker","type":"circle","source":"ff-airports","slot":"top","filter":["==",["get","departure"],true],"paint":{"circle-color":"#060C0A","circle-radius":5,"circle-stroke-color":"#D8DFCE","circle-stroke-width":2}}"""), null)
+        style.addStyleLayer(json("""{"id":"ff-airport-labels","type":"symbol","source":"ff-airports","slot":"top","filter":["!=",["get","departure"],true],"layout":{"icon-image":["get","chip"],"icon-size":0.5,"icon-allow-overlap":true,"icon-offset":[0,42]}}"""), null)
         style.addStyleModel("ff-owned-aircraft", "asset://aircraft.glb")
         style.addLayer(modelLayer("ff-aircraft", "ff-plane") {
             modelId("ff-owned-aircraft")
