@@ -30,3 +30,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# Local backups and duplicate working copies stay on disk only.
+*.backup
+*.backup2
+*\(copy\)*
