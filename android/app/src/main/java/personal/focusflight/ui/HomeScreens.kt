@@ -34,24 +34,21 @@ fun HomeScreen(home: AirportEntry,prefs: AppPrefs,start: ()->Unit,airport: ()->U
     val headerColor=if(prefs.mapMode==MapMode.TERRA) Paper else Ink
     Box(Modifier.fillMaxSize().background(Ink)) {
         FlightMap(MapScene(point,airports=listOf(MapAirport(home.airport.code,point,true)),mode=prefs.mapMode,
-            labels=prefs.labels,terrain=prefs.terrain,buildings=prefs.buildings,bottomInsetDp=255f),Modifier.fillMaxSize())
+            labels=prefs.labels,terrain=prefs.terrain,buildings=prefs.buildings,bottomInsetDp=110f),Modifier.fillMaxSize())
         Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(
             if(headerColor==Ink) Color.White.copy(alpha=.25f) else Color.Black.copy(alpha=.3f),Color.Transparent,Color.Black.copy(alpha=.15f)))))
         Column(Modifier.fillMaxSize().safeDrawingPadding().padding(horizontal=18.dp)) {
-            Column(Modifier.padding(top=30.dp,start=12.dp).clickable(onClick=airport)) {
+            Row(Modifier.fillMaxWidth().padding(top=20.dp),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.Top) {
+            Column(Modifier.padding(start=12.dp).weight(1f).clickable(onClick=airport)) {
                 Text(when(LocalTime.now().hour) {in 5..11->"Good morning!";in 12..17->"Good afternoon!";else->"Good evening!"},
                     color=headerColor.copy(alpha=.65f),fontSize=16.sp,fontWeight=FontWeight.Medium)
                 Text(home.displayCity,color=headerColor,fontSize=34.sp,fontWeight=FontWeight.Bold)
             }
+            GlassIconButton(Glyph.PROFILE,"Profile and settings",{open("SETTINGS")})
+            }
             Spacer(Modifier.weight(1f))
             FlightCapsule("Start Journey",start,Modifier.padding(horizontal=12.dp),pastel=true)
-            Spacer(Modifier.height(20.dp))
-            GlassPanel(Modifier.fillMaxWidth()) {
-                listOf("Mine","Trends","World").forEach { label ->
-                    Text(label,color=Paper,fontSize=17.sp,fontWeight=FontWeight.Medium,
-                        modifier=Modifier.fillMaxWidth().clickable {open(label)}.padding(horizontal=1.dp,vertical=9.dp))
-                }
-            }
+            Spacer(Modifier.height(44.dp))
             Spacer(Modifier.height(10.dp))
         }
     }

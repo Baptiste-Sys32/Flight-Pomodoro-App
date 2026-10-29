@@ -17,6 +17,11 @@ import personal.focusflight.domain.session.GeoPoint
 
 @Composable
 fun RendererPreview(initialScene: String = "globe", onBack: () -> Unit) {
+    if(initialScene in listOf("window-ground","window-cruise","window-descent")) {
+        val progress=when(initialScene) {"window-cruise"->.5;"window-descent"->.98;else->0.0}
+        WindowFocusView(Modifier.fillMaxSize(),scene=MapScene(GeoPoint(0.0,0.0),progress=progress))
+        return
+    }
     var mode by remember { mutableStateOf(MapMode.STANDARD) }
     var globe by remember { mutableStateOf(initialScene == "globe") }
     var city by remember { mutableStateOf(initialScene == "city") }
@@ -25,7 +30,7 @@ fun RendererPreview(initialScene: String = "globe", onBack: () -> Unit) {
     val paris = GeoPoint(48.8591, 2.2917)
     val london = GeoPoint(51.5072, -.1276)
     Box(Modifier.fillMaxSize().background(Color(0xFF111C1C))) {
-        if (window) WindowFocusView(Modifier.fillMaxSize())
+        if (window) WindowFocusView(Modifier.fillMaxSize(),scene=MapScene(paris,london,progress=.02,mode=mode))
         else FlightMap(MapScene(paris, if (city) null else london, listOf(MapAirport("PAR", paris), MapAirport("LON", london)),
             progress = .25, mode = mode, globe = globe, zoomOverride = if (city) 16.0 else null,
             bottomInsetDp = 180f), Modifier.fillMaxSize()) { status = it }

@@ -1,0 +1,6 @@
+A320 model by amvlab, copyright 2026 amvlab.
+Licensed under Creative Commons Attribution 4.0 International.
+https://creativecommons.org/licenses/by/4.0/
+https://github.com/amvlab/aircraft-models
+Source: models/A320_nologo.glb at revision 91d835e8e851b2317fe79af291c9fed6153fd525.
+No geometry or texture changes. Display scale and orientation are configured by the app.

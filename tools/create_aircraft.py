@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create an original, small glTF aircraft mesh for the cartographic flight marker."""
+"""Retain the original prototype generator. The shipping marker uses the licensed A320."""
 import json
 import math
 import struct
@@ -20,7 +20,7 @@ def triangle(a, b, c, material=0):
     triangles[material].extend((p, n) for p in [a, b, c])
 
 
-def fuselage(x, y, rings, material=0, sides=20):
+def fuselage(x, y, rings, material=0, sides=40):
     for (z1, r1), (z2, r2) in zip(rings, rings[1:]):
         for i in range(sides):
             a, b = i*2*math.pi/sides, (i+1)*2*math.pi/sides
@@ -41,7 +41,7 @@ def wing(polygon, low, high, material=0):
         triangle((a[0], low, a[1]), (b[0], high, b[1]), (a[0], high, a[1]), material)
 
 
-fuselage(0, 0, [(-16,0),(-14,1.0),(-11,1.7),(-7,1.85),(6,1.65),(12,.7),(15,0)])
+fuselage(0, 0, [(-18,0),(-17,.55),(-15,1.2),(-12,1.65),(-8,1.85),(5,1.75),(11,1.1),(15,.35),(17,0)])
 for side in [-1, 1]:
     wing([(side*1.3,-5),(side*17,3),(side*17,5),(side*1.3,3)], -.25, .05)
     wing([(side*1,9),(side*6.5,12),(side*6.5,14),(side*.8,12)], .5, .7)
@@ -52,9 +52,9 @@ for side in [-1, 1]:
     triangle((side*.1,1.22,-12.2),(side*1.15,1.05,-11.1),(side*1.28,1.4,-8.9),1)
     triangle((side*.1,1.22,-12.2),(side*1.28,1.4,-8.9),(side*.1,1.57,-9.1),1)
 for x in [-.13,.13]:
-    triangle((x,.8,8),(x,5.4,12),(x,1.0,14.6),2)
-triangle((-.13,5.4,12),(.13,5.4,12),(.13,1,14.6),2)
-triangle((-.13,5.4,12),(.13,1,14.6),(-.13,1,14.6),2)
+    triangle((x,.8,8),(x,6.6,13),(x,1.0,14.6),2)
+triangle((-.13,6.6,13),(.13,6.6,13),(.13,1,14.6),2)
+triangle((-.13,6.6,13),(.13,1,14.6),(-.13,1,14.6),2)
 
 binary = bytearray()
 views, accessors, primitives = [], [], []
@@ -103,7 +103,8 @@ binary += b'\0' * ((-len(binary)) % 4)
 total = 12 + 8 + len(encoded) + 8 + len(binary)
 output = struct.pack('<III',0x46546C67,2,total) + struct.pack('<II',len(encoded),0x4E4F534A) + encoded
 output += struct.pack('<II',len(binary),0x004E4942) + binary
-path = ROOT/'android/app/src/main/assets/aircraft.glb'
+path = ROOT/'android/build/local-validation/original-aircraft.glb'
+path.parent.mkdir(parents=True, exist_ok=True)
 path.write_bytes(output)
 assert len(output) == total and all(v['count'] % 3 == 0 for v in accessors)
 print(f'Original glTF aircraft written: {total} bytes, {sum(len(t) for t in triangles)//3} triangles.')

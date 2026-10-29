@@ -79,3 +79,29 @@ Latest validation: debug app/test APK builds and all 10 clock/geography unit tes
 Satellite raster requests return HTTP 429, including from the native SDK. A single diagnostic tile request also returned 429 with a provider limit header of -1; the cause is not verified. Style metadata and vector maps remain accessible. The user then explicitly removed satellite imagery from scope on 2026-10-28. No account action, paid service or alternative billing product is required for satellite.
 
 Satellite imagery and the satellite-window scene are omitted by approval. No satellite tile source or picker option remains in the app. The app retains a limited-map notice and retry action for real provider failures. Terrain availability is checked separately; vector buildings and globe do not depend on satellite imagery.
+
+
+## Feedback-driven rework, 2026-10-29
+
+The user rejected the provisional ticket artwork, hand-drawn icons, cabin silhouette, white-on-white route/ruler, camera snapping, static-feeling window and blurred pause presentation. The revised direction is recorded at the end of ui-spec.md. The airport picker, boarding tear and takeoff message/flow are retained.
+
+Implementation changes:
+
+- Bottom home action and top-right profile/settings; the Mine/Trends/World home panel is removed. FlightLog remains reachable through profile/settings.
+- A solid duration-ruler surface and dark blue route with a pale casing on light styles, pale route with dark casing on Terra. Route-selection motion travels from departure to destination.
+- Native Mapbox ornaments at the bottom-right map edge. Required attribution stays on-map.
+- Gesture-detached follow camera, explicit re-follow, fewer clock/render updates, cached aircraft poses and style changes without a whole style reload.
+- Upright aircraft with no extra 90-degree pitch, refined original 1200-triangle mesh, larger visible marker. A rendered Paris city scene shows it horizontal with wings and tail visible.
+- Licensed Lucide UI icons, tapered cabin outline, cockpit/windows and seat cushions.
+- Clean paper pass, no watermark lines, real PDF417 encoding only a local session reference. The original stub tear and takeoff interstitial remain.
+- Window geography follows the same session progress, with simulated climb/cruise/descent zoom, animated cloud cover, pause-aware motion and an operable blind. No satellite imagery is used.
+- Nearly black pause state with centered remaining time and Resume flight.
+
+Validation in progress: all 11 unit tests passed, including barcode round-trip decoding. Emulator cold startup showed a System UI ANR dialog, which was dismissed before visual review. The upright aircraft and vector buildings were then inspected. Final gesture, displayed-barcode, window-blind and complete-flow instrumentation results will be recorded before committing this revision. Phone ADB was disconnected at the start of this revision; phone performance is not yet reverified.
+
+
+## Second feedback revision completed, 2026-10-29
+
+The latest device-feedback changes and exact validation scope are in [changelog-2026-10-29.md](changelog-2026-10-29.md). They supersede the first revision's live-geography window approach. The window is now an offline fictional 3D scene with one native blind.
+
+Final validation: debug builds passed; 11 unit tests passed; four emulator instrumentation tests passed; three S24 Ultra map/window instrumentation tests passed. The final native scenery test checks visible detail, actual displayed motion, freeze on pause and absence of a Mapbox view. Flight records/preferences were preserved. Further visual polish and long-session performance/battery measurements remain.

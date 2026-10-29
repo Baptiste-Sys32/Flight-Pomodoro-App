@@ -1,0 +1,9 @@
+{
+  "creator": "amvlab",
+  "license": "CC-BY-4.0",
+  "repository": "https://github.com/amvlab/aircraft-models",
+  "revision": "91d835e8e851b2317fe79af291c9fed6153fd525",
+  "source_path": "models/A320_nologo.glb",
+  "sha256": "08cc60caafe3d0937f3e12e72c28bcb96dfdb39763ac124bcd4da8adaea11ab9",
+  "changes": "None to model data; display scale/orientation configured by app"
+}

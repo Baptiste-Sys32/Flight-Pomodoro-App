@@ -1,0 +1,33 @@
+{
+  "repository": "https://github.com/lucide-icons/lucide",
+  "commit": "5aae256c6479aef74c609b536d10675c97c714e3",
+  "svg_sha256": {
+    "chevron-left": "83b0681aa38bf55e9d52a1e4b4cced624abe1fe7678ecafda133a574f1161d93",
+    "x": "4a9cdab38fbb96162e7dace28e33f4ca0e49d8963a6162abc3d4691b7d675117",
+    "pause": "f122ec4ea7f5693a0b1baafa9c708b53980dc87b4aacb297c6e6f71c1a4c115c",
+    "play": "d7c34786135922a92b6896f6c2384ceeb0346afbf6041dc79982011411409833",
+    "plane": "4c775a62a524be78fe20aed8544933d4bd3802c5eca17cd6923509f87671d6d6",
+    "volume-2": "fb404f9c128a0579de67b399177631e5edb3502fdc247ceb30e8b15754b46071",
+    "globe": "82c6b8fa0b8e8d775ec9becd86f74a4e50bff7bee4c81f7362de45348504f14d",
+    "map": "41300a8ef2c2a4cf36ec3f8a730bcb4754543889eb23b98e7435de7a0757752d",
+    "route": "fc169fd38a9963b016ad6d60fd72baa2b0ea8e0cec085bbc53287297c3d8121a",
+    "search": "283d371c2e433817bb9c0c8310caa6c77fa4177c0f4f1168d9c83b97af7389dc",
+    "shuffle": "7051f9ba993df6e7fefd9e3ffccb5d812e0f83c89e1287a850111295202edee0",
+    "locate-fixed": "3a10953374c6e811d8da564f87943cf52f47e284c6173ff211ffedc083b90430",
+    "settings-2": "06d06c191bd7eb28afaf9d40acb5c49ef69448fdeda91801d9823d7c440a4e10",
+    "book-open": "9b9bed0ff057283d5c5c5a1c71f8d3e927db26a56639603a92fdf7b25961510e",
+    "laptop": "b8389056d3b7125670b60a4bd03e6d4ecc440e228f4140e7b66c4e97dcb0dc70",
+    "palette": "8e7d3fde990cffd10469ba351f27c50202b057a9bb9af5626322e53fd3abc78c",
+    "notebook-pen": "56705c35e839977bd6f133d7ca4e9c93a6eea563c89e4be125efd0a32e1fa041",
+    "chart-no-axes-column": "5dfd8fc5b5417dad858991de4969c3fe1c4a466104d0880a15b691ff7c5b1f12",
+    "credit-card": "72d2b1acd904e01c6f676b4f6d07d56550a80b5d42687d43a313b85040943a2e",
+    "list-filter": "36b94082bd7f161244c06a27cdeea647cb99ee5b805183cbeaf7ac3155a7103b",
+    "plus": "7f6af73bf1ff6c4bca3f18351c8d1bdec6749c0c2530c4de5da85d520c21df17",
+    "check": "7f33acc9a77a61659531044525fc008edebe215bf4dcf1c789c8674ad3277db0",
+    "chevron-right": "2758143d7b2434e4aa7307dfd34405c87909ff4052f21b5f3f40d45224b4f19b",
+    "trash": "27299f69ad7c6272be64b1b8e2d48cbd6dcf0ef0d4f92827a1affa945c91700e",
+    "graduation-cap": "326b4a1c18429509a697cbc0c49fdfcf9316da34bcf581569c2fc73cc772b86f",
+    "user-round": "84870f26f3faf8da45da84174517519e81b9e8f00319c78954fcbb74f50038a1"
+  },
+  "conversion": "SVG geometry to Android VectorDrawable, stroke 1.75, SVG arcs normalized to absolute cubic paths with tools/normalize_icon_paths.py"
+}

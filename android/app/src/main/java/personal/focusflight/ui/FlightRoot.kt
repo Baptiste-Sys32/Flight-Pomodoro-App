@@ -38,6 +38,7 @@ import java.util.Locale
 
 @Composable
 fun FlightRoot(vm: FlightViewModel,requestNotifications: ()->Unit,renderer: ()->Unit) {
+    val uriHandler=androidx.compose.ui.platform.LocalUriHandler.current
     val prefs by vm.prefs.collectAsStateWithLifecycle()
     val flights by vm.flights.collectAsStateWithLifecycle()
     val drafts by vm.drafts.collectAsStateWithLifecycle()
@@ -74,7 +75,7 @@ fun FlightRoot(vm: FlightViewModel,requestNotifications: ()->Unit,renderer: ()->
         LaunchedEffect(current?.id,current?.state,owner) {
             now=vm.clock()
             if(current?.state=="ACTIVE") owner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                while(true) {now=vm.clock();delay(100)}
+                while(true) {now=vm.clock();delay(250)}
             }
         }
         val mapChange:(MapMode?,Boolean?,Boolean?,Boolean?)->Unit={m,l,t,b->vm.changePreferences {map(m,l,t,b)}}
@@ -131,13 +132,21 @@ fun FlightRoot(vm: FlightViewModel,requestNotifications: ()->Unit,renderer: ()->
                             MenuRow("Home Map Style",p.mapMode.title,Glyph.MAP) {screen="MAP"}
                             MenuRow("Settings",glyph=Glyph.SETTINGS) {screen="SETTINGS"}
                         }
-                        "MAP"->MapStylePanel(p,{screen="MINE"},mapChange)
-                        "SETTINGS"->FocusPanel("Settings",{screen="MINE"}) {
+                        "MAP"->MapStylePanel(p,{screen="SETTINGS"},mapChange)
+                        "SETTINGS"->FocusPanel("Profile and settings",{screen="HOME"}) {
+                            MenuRow("FlightLog",glyph=Glyph.NOTE) {screen="LOG"}
                             MenuRow("Departure airport",p.homeCode) {screen="ORIGIN"}
                             MenuRow("Map style",p.mapMode.title) {screen="MAP"}
+                            MenuRow("Asset credits") {screen="CREDITS"}
                             MenuRow("Units",p.unit.label) {vm.changePreferences {units(if(p.unit==DistanceUnit.KILOMETERS) DistanceUnit.NAUTICAL_MILES else DistanceUnit.KILOMETERS)}}
                             SettingsToggle("Keep Screen Awake",p.keepAwake) {enabled->vm.changePreferences {awake(enabled)}}
-                            if(BuildConfig.DEBUG) MenuRow("Renderer check") {renderer()}
+                        }
+                        "CREDITS"->FocusPanel("Asset credits",{screen="SETTINGS"}) {
+                            Text("A320 model by amvlab (2026), CC BY 4.0. Unbranded model; display scale and orientation configured by this app.",color=Paper.copy(alpha=.7f),fontSize=12.sp)
+                            MenuRow("amvlab aircraft models") {uriHandler.openUri("https://github.com/amvlab/aircraft-models")}
+                            MenuRow("Creative Commons BY 4.0") {uriHandler.openUri("https://creativecommons.org/licenses/by/4.0/")}
+                            MenuRow("City scenery: Kenney", "CC0") {uriHandler.openUri("https://kenney.nl/assets/city-kit-commercial")}
+                            Text("UI icons: Lucide (ISC/MIT). Font: Inter (SIL Open Font License). License notices are bundled with the app.",color=Paper.copy(alpha=.7f),fontSize=12.sp)
                         }
                         "TRENDS"->TrendsPanel(saved,{screen="HOME"})
                     }

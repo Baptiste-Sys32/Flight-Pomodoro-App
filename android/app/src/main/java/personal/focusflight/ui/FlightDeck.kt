@@ -43,6 +43,7 @@ fun FlightDeck(
 ) {
     var window by rememberSaveableFlight(flight.id) { false }
     var overview by rememberSaveableFlight(flight.id) { false }
+    var following by rememberSaveableFlight(flight.id) { true }
     var panel by remember { mutableStateOf<String?>(null) }
     var status by remember { mutableStateOf(MapStatus.LOADING) }
     val paused = flight.state == "PAUSED"
@@ -51,38 +52,35 @@ fun FlightDeck(
     val to = GeoPoint(flight.arrivalLat, flight.arrivalLon)
     val hiddenDestination = flight.randomRoute
     Box(Modifier.fillMaxSize().background(Color.Black)) {
-        Box(Modifier.fillMaxSize().then(if (paused) Modifier.blur(16.dp) else Modifier)) {
-            if (window) WindowFocusView(Modifier.fillMaxSize(), paused)
+        Box(Modifier.fillMaxSize()) {
+            if (window) WindowFocusView(Modifier.fillMaxSize(),paused,MapScene(from,to,progress=progress,mode=prefs.mapMode,terrain=prefs.terrain,buildings=prefs.buildings),flight.durationMs)
             else FlightMap(MapScene(from, to,
                 airports = if (hiddenDestination) emptyList() else listOf(MapAirport(flight.departureCode, from,true), MapAirport(flight.arrivalCode, to)),
                 progress = progress, mode = prefs.mapMode, labels = prefs.labels, terrain = prefs.terrain,
-                buildings = prefs.buildings, follow = !overview, bottomInsetDp = 110f,showRoute=!hiddenDestination), Modifier.fillMaxSize()) { status = it }
+                buildings = prefs.buildings, follow = following && !overview, bottomInsetDp = 110f,showRoute=!hiddenDestination), Modifier.fillMaxSize(),onUserGesture={following=false}) { status = it }
         }
         Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Black.copy(alpha=.15f), Color.Transparent,
             Color.Transparent, Color.Black.copy(alpha=.7f)))))
-        if (paused) Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha=.52f)))
+        if (paused) Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha=.92f)))
         Column(Modifier.fillMaxSize().safeDrawingPadding().padding(horizontal=10.dp, vertical=10.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.SpaceBetween) {
                 Column {
                     GlassIconButton(if(paused) Glyph.PLAY else Glyph.PAUSE, if(paused) "Resume" else "Pause",
                         { command(if(paused) "RESUME" else "PAUSE") })
-                    GlassIconButton(Glyph.ROUTE, "Route overview", { overview = !overview; window = false }, selected=overview)
+                    GlassIconButton(if(following && !overview) Glyph.ROUTE else Glyph.LOCATION,
+                        if(following && !overview) "Route overview" else "Follow aircraft",
+                        {if(following && !overview) {overview=true;following=false} else {overview=false;following=true};window=false},selected=following && !overview)
                     GlassIconButton(Glyph.SETTINGS, "Flight options", { panel = "options" })
                 }
                 Column {
-                    GlassIconButton(Glyph.MAP, "Choose map style", { panel = "map" })
-                    GlassIconButton(if(window) Glyph.GLOBE else Glyph.WINDOW, if(window) "Map view" else "Window view",
+                    GlassIconButton(Glyph.PALETTE, "Choose map style", { panel = "map" })
+                    GlassIconButton(if(window) Glyph.MAP else Glyph.WINDOW, if(window) "Map view" else "Window view",
                         { window = !window }, selected=window)
                 }
             }
             if (!window && status == MapStatus.UNAVAILABLE) Text("Map unavailable. Your timer is still running.", color=Paper,
                 fontSize=11.sp, modifier=Modifier.padding(8.dp).clip(RoundedCornerShape(12.dp)).background(Glass).padding(12.dp))
             Spacer(Modifier.weight(1f))
-            if (paused) Column(Modifier.fillMaxWidth().padding(bottom=24.dp), horizontalAlignment=Alignment.CenterHorizontally) {
-                Text("Paused", color=Paper.copy(alpha=.5f), fontSize=13.sp)
-                Text(DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(flight.anchorWallMs)), color=Paper,
-                    fontSize=14.sp, fontWeight=FontWeight.SemiBold)
-            }
             Row(Modifier.fillMaxWidth().padding(horizontal=5.dp, vertical=16.dp), horizontalArrangement=Arrangement.SpaceBetween,
                 verticalAlignment=Alignment.Bottom) {
                 Column {
@@ -95,6 +93,15 @@ fun FlightDeck(
                         fontSize=24.sp,fontWeight=FontWeight.SemiBold)
                 }
             }
+        }
+        if(paused) Column(Modifier.align(Alignment.Center).padding(32.dp),horizontalAlignment=Alignment.CenterHorizontally) {
+            FlightIcon(Glyph.PAUSE,Paper.copy(alpha=.5f),Modifier.size(28.dp))
+            Spacer(Modifier.height(20.dp))
+            Text("Flight paused",color=Paper,fontSize=26.sp,fontWeight=FontWeight.SemiBold)
+            Spacer(Modifier.height(8.dp))
+            Text(TimerPlatform.formatRemaining(remainingMs)+" remaining",color=Paper.copy(alpha=.65f),fontSize=14.sp)
+            Spacer(Modifier.height(28.dp))
+            FlightCapsule("Resume flight",{command("RESUME")},Modifier.width(210.dp),pastel=true)
         }
         when(panel) {
             "map" -> MapStylePanel(prefs, { panel=null }, changeMap)
@@ -151,7 +158,7 @@ fun MapStylePanel(prefs: AppPrefs, close: () -> Unit, change: (MapMode?, Boolean
                         MapStyleSwatch(mode,Modifier.fillMaxSize())
                         Text(mode.title,color=if(mode==MapMode.MONOCHROME || mode==MapMode.STANDARD) Ink else Paper,
                             fontSize=12.sp,fontWeight=FontWeight.SemiBold,modifier=Modifier.align(Alignment.BottomStart).padding(14.dp))
-                        if(prefs.mapMode==mode) FlightIcon(Glyph.CHECK,Paper,Modifier.align(Alignment.TopEnd).padding(10.dp).size(16.dp))
+                        if(prefs.mapMode==mode) FlightIcon(Glyph.CHECK,if(mode==MapMode.TERRA) Paper else Ink,Modifier.align(Alignment.TopEnd).padding(10.dp).size(16.dp))
                     }
                 }
             }

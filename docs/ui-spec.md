@@ -166,3 +166,34 @@ On 2026-10-28 the user removed satellite imagery entirely. Preserve the source e
 Observed motion vocabulary: floating scenario tags, map camera travel, sheet expansion, seat highlight, ticket-stub rotation/separation, card reveal and aircraft progression. Exact durations, easing curves, touch latency and haptics are unknown. One-frame-per-second extraction is a navigation aid, not sufficient timing evidence; revisit the original 30 fps clip for each implemented transition.
 
 For every verified screen, Phase 2 must cover loading, empty, active, disabled, selected, permission denied/revoked, background/return and interrupted states where relevant. These are Android completeness requirements; source appearance for unavailable states remains unknown. No invented state should be described as copied. Validate light/dark content, portrait, landscape focus, font scaling, reduced animation and offline map failure. Review still-image similarity and short motion clips separately.
+
+
+## User-directed revision, 2026-10-29
+
+These explicit preferences supersede the original source layout where they differ:
+
+- Home: bottom Start Journey action, no Mine/Trends/World block. A top-right profile icon opens settings and FlightLog.
+- Map: adaptive foregrounds and an opaque duration-ruler surface; a dark route on light cartography and a pale route on Terra. Add directional motion during route selection.
+- Attribution: move the native logo and information button to the bottom-right map edge. Do not remove or move attribution exclusively into settings: Mapbox requires it on the map.
+- Seat cabin: a recognizable tapered nose, cockpit, cabin windows and actual seat shapes. Keep A/Study, C/Reading, D/Creative and F/Work. Replace provisional icons with licensed Lucide vectors.
+- Boarding pass: clean paper surface, clear metadata hierarchy, no decorative watermark lines. Replace the pseudo-barcode with a real PDF417 local session reference. Keep the existing stub tear and takeoff interstitial.
+- Flight camera: map gestures release follow mode; restoring follow is explicit. The aircraft must be upright and aligned with travel. Reduce redundant renderer work.
+- Window: live vector geography along the session route, animated cloud cover that changes through takeoff/cruise/descent, and an operable blind. Satellite remains omitted. This is a local simulation, not real weather or photographic scenery.
+- Pause: a nearly black screen with centered remaining time and an explicit Resume action. Avoid blur as the primary paused state.
+
+These are approved product directions, not newly discovered iOS behavior. Actual visual and runtime validation is recorded in implementation-status.md.
+
+
+## Second user-feedback revision, 2026-10-29
+
+- Preserve the new home/profile/FlightLog and paper pass, plus the dark pause state. Remove Renderer Check from settings.
+- The duration ruler must translate ticks and numeric labels during a drag, then settle on five-minute steps. Changing only the time label is insufficient.
+- The cockpit, fuselage, windows and seats must scroll as one cabin. Clip the scroll viewport and place the selected focus/seat and Confirm in a separate opaque footer.
+- Add a local paper-feed reveal before boarding, retaining the ticket-stub tear.
+- Replace the procedural aircraft with a licensed unbranded stock airliner. Zooming in must visibly enlarge the marker, within a practical screen-size limit.
+- Remove the extra central Map/Window toggle. The existing window-view button shows a map glyph when it returns to the map. Use a palette glyph for map appearance, distinct from flight options.
+- Use one native window frame with exactly one draggable blind. Window scenery is an offline fictional 3D airport/city/cloud scene, not the current geographic map under a translucent cloud image. Pause and a closed blind stop rendering work.
+- Globe gestures: one-finger geographic pan and two-finger zoom; disable rotation, pitch/shove, quick-zoom and pinch-pan combinations. Low-zoom globe cameras remain level/north-up.
+- Illuminate routes and airport chips in the Terra night style. Both departure and arrival need code labels.
+
+These instructions supersede the first feedback revision's geographic window approach. Native scene art and timing remain local adaptations, not verified iOS behavior.

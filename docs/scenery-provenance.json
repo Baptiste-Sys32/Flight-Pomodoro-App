@@ -1,0 +1,15 @@
+{
+  "creator": "Kenney",
+  "license": "CC0-1.0",
+  "creator_page": "https://kenney.nl/assets/city-kit-commercial",
+  "distribution_repository": "https://github.com/Hidencod/tge-assets",
+  "distribution_commit": "e26d410c77163293bcf3c07614e024552a308c69",
+  "source_glb_sha256": {
+    "building-skyscraper-a.glb": "affb365f6e19725e4e53d71191c1ef306df7d65035f8d770ab166aa8bb5c5923",
+    "building-skyscraper-b.glb": "783151cd937cbd9ebacf3af5dc30f4ef090c9a7ceb9741366c65bc1171dbd4d1",
+    "building-a.glb": "63345c203050c6f75a6c2897fa409c67db09fe333b2b855021b6b9c15090570c",
+    "building-b.glb": "cb258867e30f2ae82578a0d70d57aaaedd4d4208702b7222d6c237a6b92f8834",
+    "building-c.glb": "834acf7c9a5fa99899d66645e35aa79a1bfca8930c6ed50fb135cf272bc2289f",
+    "building-d.glb": "e520b003c21994481b14b16d4eaa9624a03d83e3e4ece3f1446e963b61e68bcf"
+  }
+}
